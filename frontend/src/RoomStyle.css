@@ -1,4 +1,4 @@
-.imgs {
+.imgw {
     position: absolute;
     width: 469px;
     height: 202px;
@@ -6,7 +6,15 @@
     left: 125px;
 }
 
-.game-creation-field{
+.imgm {
+    position: absolute;
+    width: 524px;
+    height: 194px;
+    left: 1110px;
+    top: 674px;
+}
+
+.game-creation-button{
     position: absolute;
     text-align: center;
     color: #FFFFFF;
@@ -21,4 +29,28 @@
     border-top-width: 0;
     border-left-width: 0;
     border-color: #E0E9BA;
+}
+
+.game-creation-field {
+    position: absolute;
+    width: 426px;
+    height: 320px;
+    left: 1166px;
+    top: 327px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    position: absolute;
+    width: 987px;
+    height: 437px;
+    left: 87px;
+    top: 210px;
+    border-radius: 15px;
+    background-color: #FFFFFF;
 }
