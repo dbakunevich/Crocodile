@@ -34,9 +34,9 @@
 .game-creation-field {
     position: absolute;
     width: 426px;
-    height: 320px;
+    height: 280px;
     left: 1166px;
-    top: 327px;
+    top: 367px;
     background-color: #FFFFFF;
     border-radius: 15px;
 }
@@ -61,7 +61,7 @@
     color: #BFBE56;
     border-radius: 5px;
     position: absolute;
-    left: 29px;
+    left: 150px;
     top: 31px;
 }
 
@@ -77,12 +77,17 @@
 
 .dictionaries{
     position: absolute;
-    width: 238px;
-    height: 156px;
-    left: 175px;
-    top: 153px;
+    width: 400px;
+    left: 13px;
+    top: 196px;
     background-color: lightgray;
     border-radius: 15px;
+    max-height: 100px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 20px;
 }
 
 .number-players {
@@ -91,9 +96,10 @@
     height: 30px;
     left: 220px;
     top: 87px;
-    border-radius: 15px;
+    border-color: lightgray;
+    border-radius: 5px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 300;
     font-size: 24px;
-    line-height: 20px;
+    line-height: 30px;
 }
