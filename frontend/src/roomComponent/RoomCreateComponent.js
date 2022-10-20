@@ -1,5 +1,5 @@
 import React from "react";
-import './RoomStyle.css';
+import '../style/RoomStyle.css';
 import DictionarComponent from "./DictionarComponent";
 export default function RoomCreateComponent() {
     return(

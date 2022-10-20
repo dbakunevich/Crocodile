@@ -1,7 +1,7 @@
 import React from "react";
-import './RoomStyle.css';
-import TableComponent from "./TableComponent";
-import RoomCreateComponent from "./RoomCreateComponent";
+import './style/RoomStyle.css';
+import TableComponent from "./roomComponent/TableComponent";
+import RoomCreateComponent from "./roomComponent/RoomCreateComponent";
 
 export default function Room() {
     return(
