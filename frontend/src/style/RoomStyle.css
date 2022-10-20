@@ -1,0 +1,105 @@
+.imgw {
+    position: absolute;
+    width: 469px;
+    height: 202px;
+    top: 8px;
+    left: 125px;
+}
+
+.imgm {
+    position: absolute;
+    width: 524px;
+    height: 194px;
+    left: 1110px;
+    top: 674px;
+}
+
+.game-creation-button{
+    position: absolute;
+    text-align: center;
+    color: #FFFFFF;
+    border-width: 3px;
+    width: 426px;
+    height: 79px;
+    left: 1166px;
+    top:210px;
+    background-color: #B7F46E;
+    mix-blend-mode: normal;
+    border-radius: 15px;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-color: #E0E9BA;
+}
+
+.game-creation-field {
+    position: absolute;
+    width: 426px;
+    height: 280px;
+    left: 1166px;
+    top: 367px;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    position: absolute;
+    width: 987px;
+    height: 437px;
+    left: 87px;
+    top: 210px;
+    border-radius: 15px;
+    background-color: #FFFFFF;
+}
+
+.checkbox-room {
+    width: 40px;
+    height: 40px;
+    color: #BFBE56;
+    border-radius: 5px;
+    position: absolute;
+    left: 150px;
+    top: 31px;
+}
+
+.lable-text {
+    position: absolute;
+    left: 29px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 20px;
+}
+
+.dictionaries{
+    position: absolute;
+    width: 400px;
+    left: 13px;
+    top: 196px;
+    background-color: lightgray;
+    border-radius: 15px;
+    max-height: 100px;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 20px;
+}
+
+.number-players {
+    position: absolute;
+    width: 93px;
+    height: 30px;
+    left: 220px;
+    top: 87px;
+    border-color: lightgray;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 30px;
+}
