@@ -1,0 +1,24 @@
+.imgs {
+    position: absolute;
+    width: 469px;
+    height: 202px;
+    top: 8px;
+    left: 125px;
+}
+
+.game-creation-field{
+    position: absolute;
+    text-align: center;
+    color: #FFFFFF;
+    border-width: 3px;
+    width: 426px;
+    height: 79px;
+    left: 1166px;
+    top:210px;
+    background-color: #B7F46E;
+    mix-blend-mode: normal;
+    border-radius: 15px;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-color: #E0E9BA;
+}
