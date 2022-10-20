@@ -1,9 +1,9 @@
 import React from "react";
-import './style/RoomStyle.css';
-import TableComponent from "./roomComponent/TableComponent";
-import RoomCreateComponent from "./roomComponent/RoomCreateComponent";
+import '../styles/RoomStyle.css';
+import TableComponent from "../components/roomComponent/TableComponent";
+import RoomCreateComponent from "../components/roomComponent/RoomCreateComponent";
 
-export default function Room() {
+const RoomStore = () => {
     return(
         <div>
             <img className="imgw" src="crocodileWelcoming.png" />
@@ -12,8 +12,8 @@ export default function Room() {
                 Создать комнату
             </button>
             <RoomCreateComponent/>
-
             <TableComponent/>
         </div>
     )
 }
+export default RoomStore;

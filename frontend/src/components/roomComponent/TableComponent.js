@@ -1,5 +1,5 @@
 import React from "react";
-import '../style/RoomStyle.css';
+import '../../styles/RoomStyle.css'
 
 export default function TableComponent() {
     return(
