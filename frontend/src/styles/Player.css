@@ -1,10 +1,11 @@
 .parent-container {
     display: grid;
-    gap: 20px;
+    grid-column-gap: 50px;
+    grid-row-gap: 20px;
     margin-left: 50px;
     margin-top: 50px;
     margin-right: 100px;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 3fr 1fr;
     grid-template-rows: 12fr 2fr ;
 }
 
@@ -26,7 +27,6 @@
     grid-column-start: 2;
     grid-row-start: 1;
     grid-row-end: 3;
-    background-color: blue;
     border-radius: 10px;
     grid-template-rows: 1fr 5fr;
     gap: 10px;
@@ -42,20 +42,44 @@
     display: grid;
     padding: 10px;
     border-radius: 10px;
-    background-color: beige;
-    grid-template-rows: 5fr 1fr;
+    background-color: #E1F9B0;
+    grid-template-rows: 7fr 1fr;
     gap: 10px;
 }
 
 .text-field  {
-    background-color: white;
     padding: 10px;
     border-radius: 10px;
 }
 
 .enter-button {
+    position: relative;
     padding: 10px;
     border-radius: 10px;
-    background-color: gray;
+    background-color: white;
 
+}
+
+.send-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    width: 70px;
+    height: 70px;
+}
+
+.enter-button .input {
+    border: none;
+    position: absolute;
+    bottom: 25px;
+    left: 20px;
+    font-size: 20px;
+    outline: none;
+}
+
+.enter-button .input .active{
+    border: none;
+    position: absolute;
+    bottom: 25px;
+    font-size: 20px;
 }
