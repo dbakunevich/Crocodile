@@ -1,0 +1,61 @@
+.parent-container {
+    display: grid;
+    gap: 20px;
+    margin-left: 50px;
+    margin-top: 50px;
+    margin-right: 100px;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 12fr 2fr ;
+}
+
+.draw-board {
+    padding: 50px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.drawing-things {
+    padding: 50px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.communication-part{
+    display: grid;
+    padding: 10px;
+    grid-column-start: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    background-color: blue;
+    border-radius: 10px;
+    grid-template-rows: 1fr 5fr;
+    gap: 10px;
+}
+
+.settings {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: white;
+}
+
+.chat {
+    display: grid;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: beige;
+    grid-template-rows: 5fr 1fr;
+    gap: 10px;
+}
+
+.text-field  {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.enter-button {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: gray;
+
+}
