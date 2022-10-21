@@ -10,7 +10,7 @@ const Drawer = () => {
                 <div className="chat">
                     <div className="text-field">text field</div>
                     <div className="enter-button">
-                        <input type="text" placeholder="Что же это?.." className="input"></input>
+                        <input type="text" placeholder="Что же это а?.." className="input"></input>
                         <img className="send-button" src="gameField/sendEmpty.png"/>
                     </div>
                 </div>
