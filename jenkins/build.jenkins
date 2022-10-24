@@ -18,7 +18,7 @@ pipeline {
         }
         stage ('Build backend') {
             steps {
-                updateGitlabCommitStatus name: 'build', state: 'pending'
+                updateGitlabCommitStatus name: 'build_backend', state: 'pending'
                 echo  " ============== start building backend ==================="
                 dir ('backend') {
                 	sh 'mvn clean package spring-boot:repackage'
@@ -26,16 +26,17 @@ pipeline {
             }
             post {
                 success {
-                    updateGitlabCommitStatus name: 'build', state: 'success'
+                    updateGitlabCommitStatus name: 'build_backend', state: 'success'
                     }
                 failure {
-                    updateGitlabCommitStatus name: 'build', state: 'failed'
+                    updateGitlabCommitStatus name: 'build_backend', state: 'failed'
                     echo "Check that the database has been successfully brought up"
                     }
             }
         }
         stage("Create and run docker image for backend") {
             steps {
+                updateGitlabCommitStatus name: 'build_docker', state: 'pending'
                 echo " ============== start building docker image =================="
                 // sh 'cp /var/lib/jenkins/workspace/back/backend/target/crocodile-0.0.1-SNAPSHOT.jar /var/lib/jenkins/workspace/back/backend/crocodile-0.0.1-SNAPSHOT.jar'
                 dir ('backend') {
@@ -46,26 +47,27 @@ pipeline {
             }
             post {
                 success {
-                    updateGitlabCommitStatus name: 'build', state: 'success'
+                    updateGitlabCommitStatus name: 'build_docker', state: 'success'
                     }
                 failure {
-                    updateGitlabCommitStatus name: 'build', state: 'failed'
+                    updateGitlabCommitStatus name: 'build_docker', state: 'failed'
                     }
             }            
         }
         stage("Run docker container for backend") {
             steps {
+                updateGitlabCommitStatus name: 'run_docker', state: 'pending'
                 echo " ============== run docker container ========================="
-                sh 'docker run --rm --name --net=host backend -d -p 8181:8181 backend_crocodile:release'
+                sh 'docker run --rm --net=host --name  backend -d -p 8181:8181 backend_crocodile:release'
                 sh 'docker ps'
                 sh 'docker logs backend'
             }
             post {
                 success {
-                    updateGitlabCommitStatus name: 'build', state: 'success'
+                    updateGitlabCommitStatus name: 'run_docker', state: 'success'
                     }
                 failure {
-                    updateGitlabCommitStatus name: 'build', state: 'failed'
+                    updateGitlabCommitStatus name: 'run_docker', state: 'failed'
                     }
             }             
         }
