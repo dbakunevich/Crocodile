@@ -7,9 +7,10 @@ services:
     environment:
       - POSTGRES_USER=compose-postgres
       - POSTGRES_PASSWORD=compose-postgres
+      - POSTGRES_DB=db
 
     expose:
-        - "5433" # Publishes 5433 to other containers but NOT to host machine
+        - "6666" # Publishes 6666 to other containers but NOT to host machine
     ports:
-        - "5433:5433"
-    command: -p 5433
+        - "6666:6666"
+    command: -p 6666

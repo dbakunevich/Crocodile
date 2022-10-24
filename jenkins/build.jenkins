@@ -1,0 +1,92 @@
+#!groovy
+// Run docker build
+properties([disableConcurrentBuilds()])
+
+pipeline {
+    agent any
+    options {
+        ansiColor('xterm')
+        buildDiscarder(logRotator(numToKeepStr: '2', artifactNumToKeepStr: '2'))
+        timestamps()
+    }
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo INITIALIZE
+                ''' 
+            }
+        }
+        stage ('Build backend') {
+            steps {
+                updateGitlabCommitStatus name: 'build', state: 'pending'
+                echo  " ============== start building backend ==================="
+                dir ('backend') {
+                	sh 'mvn clean package spring-boot:repackage'
+                }
+            }
+            post {
+                success {
+                    updateGitlabCommitStatus name: 'build', state: 'success'
+                    }
+                failure {
+                    updateGitlabCommitStatus name: 'build', state: 'failed'
+                    echo "Check that the database has been successfully brought up"
+                    }
+            }
+        }
+        stage("Create and run docker image for backend") {
+            steps {
+                echo " ============== start building docker image =================="
+                // sh 'cp /var/lib/jenkins/workspace/back/backend/target/crocodile-0.0.1-SNAPSHOT.jar /var/lib/jenkins/workspace/back/backend/crocodile-0.0.1-SNAPSHOT.jar'
+                dir ('backend') {
+                    sh 'docker 2>/dev/null 1>&2 stop app_back || true'
+                    sh 'docker 2>/dev/null 1>&2 rmi backend_crocodile:release || true'
+                	sh 'docker build -t backend_crocodile:release . '
+                }
+            }
+            post {
+                success {
+                    updateGitlabCommitStatus name: 'build', state: 'success'
+                    }
+                failure {
+                    updateGitlabCommitStatus name: 'build', state: 'failed'
+                    }
+            }            
+        }
+        stage("Run docker container for backend") {
+            steps {
+                echo " ============== run docker container ========================="
+                sh 'docker run --rm --name --net=host backend -d -p 8181:8181 backend_crocodile:release'
+                sh 'docker ps'
+                sh 'docker logs backend'
+            }
+            post {
+                success {
+                    updateGitlabCommitStatus name: 'build', state: 'success'
+                    }
+                failure {
+                    updateGitlabCommitStatus name: 'build', state: 'failed'
+                    }
+            }             
+        }
+        // stage("create and run docker image for frontend") {
+        //     steps {
+        //         echo " ============== start building docker image =================="
+        //         dir ('frontend') {
+        //             sh 'docker 2>/dev/null 1>&2 stop app_front || true'
+        //             sh 'docker 2>/dev/null 1>&2 rmi frontend-app:release || true'
+        //         	sh 'docker build -t frontend-app:release . '
+        //         }
+        //     }
+        // }
+        // stage("run docker container for frontend") {
+        //     steps {
+        //         echo " ============== run docker container ========================="
+        //         sh 'docker run --rm --name app_front -d -p 3000:3000 frontend-app:release'
+        //         sh 'docker ps'
+        //         sh 'docker logs app_front'
+        //     }
+        // }
+    }
+}
