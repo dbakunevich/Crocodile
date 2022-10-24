@@ -36,9 +36,8 @@ pipeline {
         }
         stage("Create and run docker image for backend") {
             steps {
-                updateGitlabCommitStatus name: 'build_docker', state: 'pending'
+                updateGitlabCommitStatus name: 'build_docker_back', state: 'pending'
                 echo " ============== start building docker image =================="
-                // sh 'cp /var/lib/jenkins/workspace/back/backend/target/crocodile-0.0.1-SNAPSHOT.jar /var/lib/jenkins/workspace/back/backend/crocodile-0.0.1-SNAPSHOT.jar'
                 dir ('backend') {
                     sh 'docker 2>/dev/null 1>&2 stop app_back || true'
                     sh 'docker 2>/dev/null 1>&2 rmi backend_crocodile:release || true'
@@ -47,16 +46,16 @@ pipeline {
             }
             post {
                 success {
-                    updateGitlabCommitStatus name: 'build_docker', state: 'success'
+                    updateGitlabCommitStatus name: 'build_docker_back', state: 'success'
                     }
                 failure {
-                    updateGitlabCommitStatus name: 'build_docker', state: 'failed'
+                    updateGitlabCommitStatus name: 'build_docker_back', state: 'failed'
                     }
             }            
         }
         stage("Run docker container for backend") {
             steps {
-                updateGitlabCommitStatus name: 'run_docker', state: 'pending'
+                updateGitlabCommitStatus name: 'run_docker_back', state: 'pending'
                 echo " ============== run docker container ========================="
                 sh 'docker run --rm --net=host --name  backend -d -p 8181:8181 backend_crocodile:release'
                 sh 'docker ps'
@@ -64,10 +63,10 @@ pipeline {
             }
             post {
                 success {
-                    updateGitlabCommitStatus name: 'run_docker', state: 'success'
+                    updateGitlabCommitStatus name: 'run_docker_back', state: 'success'
                     }
                 failure {
-                    updateGitlabCommitStatus name: 'run_docker', state: 'failed'
+                    updateGitlabCommitStatus name: 'run_docker_back', state: 'failed'
                     }
             }             
         }
