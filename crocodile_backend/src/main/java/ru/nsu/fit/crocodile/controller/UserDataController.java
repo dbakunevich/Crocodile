@@ -6,13 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.crocodile.model.UserData;
-import ru.nsu.fit.crocodile.request.ChangeNameRequest;
-import ru.nsu.fit.crocodile.request.ChangePasswordRequest;
-import ru.nsu.fit.crocodile.request.RegistrationRequest;
+import ru.nsu.fit.crocodile.request.*;
 import ru.nsu.fit.crocodile.service.UserDataService;
 
 import javax.management.InstanceAlreadyExistsException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -39,6 +36,7 @@ public class UserDataController {
         }
     }
 
+    //TODO я в запросе почту отправляю, и в контексте проверок авторизации работает нормально, но как-то вроде id обычно используют
     @PostMapping("/changeName")
     public HttpStatus changeName(@RequestBody ChangeNameRequest request) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -82,4 +80,100 @@ public class UserDataController {
         return "redirect:/";
     }
 
+    @PostMapping("/sendFriendRequest")
+    public HttpStatus sendFriendRequest(@RequestBody FriendRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String src = request.getFromEmail();
+        String rcv = request.getToEmail();
+        if (src.equals(auth.getName())) {
+            try {
+                userDataService.sendFriendRequest(src, rcv);
+                return HttpStatus.OK;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+                return HttpStatus.CONFLICT;
+            }
+        }
+        return HttpStatus.FORBIDDEN;
+    }
+
+    @PostMapping("/acceptFriendRequest")
+    public HttpStatus acceptFriendRequest(@RequestBody AcceptFriendRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String accepting = request.getAcceptingEmail();
+        String accepted = request.getAcceptedEmail();
+        if (accepting.equals(auth.getName())) {
+            try {
+                userDataService.acceptFriendRequest(accepting, accepted);
+                return HttpStatus.OK;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                return HttpStatus.BAD_REQUEST;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return HttpStatus.CONFLICT;
+            }
+        }
+        return HttpStatus.FORBIDDEN;
+    }
+
+    @GetMapping("/getFriends/{email}")
+    public ResponseEntity<Object> getFriends(@PathVariable String email) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (email.equals(auth.getName())) {
+            try {
+                return new ResponseEntity<>(userDataService.getFriends(email), HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/getIncomingRequests/{email}")
+    public ResponseEntity<Object> getIncomingFriendRequests(@PathVariable String email) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (email.equals(auth.getName())) {
+            try {
+                return new ResponseEntity<>(userDataService.getIncomingFriendRequests(email), HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/getOutcomingRequests/{email}")
+    public ResponseEntity<Object> getOutcomingFriendRequests(@PathVariable String email) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (email.equals(auth.getName())) {
+            try {
+                return new ResponseEntity<>(userDataService.getOutcomingFriendRequests(email), HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @PostMapping("/deleteFriend")
+    public HttpStatus deleteFriend(@RequestBody DeleteFriendRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String deleting = request.getDeletingEmail();
+        String deleted = request.getDeletedEmail();
+        if (deleting.equals(auth.getName())) {
+            try {
+                userDataService.deleteFriend(deleting, deleted);
+                return HttpStatus.OK;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return HttpStatus.CONFLICT;
+            }
+        }
+        return HttpStatus.FORBIDDEN;
+    }
 }

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,5 +24,14 @@ public class UserData {
 
     @Enumerated(value = EnumType.ORDINAL)
     private Status status;
+
+    @ManyToMany
+    private List<UserData> friends = new LinkedList<>();
+
+    @ManyToMany(mappedBy = "outcomingFriendRequests")
+    private List<UserData> incomingFriendRequests = new LinkedList<>();
+
+    @ManyToMany
+    private List<UserData> outcomingFriendRequests = new LinkedList<>();
 
 }
