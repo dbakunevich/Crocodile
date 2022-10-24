@@ -1,0 +1,15 @@
+version: '2'
+
+services:         
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=compose-postgres
+      - POSTGRES_PASSWORD=compose-postgres
+
+    expose:
+        - "5433" # Publishes 5433 to other containers but NOT to host machine
+    ports:
+        - "5433:5433"
+    command: -p 5433
