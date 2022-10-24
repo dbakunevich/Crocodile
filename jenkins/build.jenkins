@@ -57,10 +57,10 @@ pipeline {
             steps {
                 updateGitlabCommitStatus name: 'run_docker_back', state: 'pending'
                 echo " ============== run docker container ========================="
-                sh 'docker run --rm --net=host --name  backend -d -p 8181:8181 backend_crocodile:release'
+                sh 'docker run --rm --net=host --name  backend_jenkins -d -p 8181:8181 backend_crocodile:release'
                 sh 'docker ps'
-                sh 'docker logs backend'
-                sh 'docker stop backend'
+                sh 'docker logs backend_jenkins'
+                sh 'docker stop backend_jenkins'
             }
             post {
                 success {
