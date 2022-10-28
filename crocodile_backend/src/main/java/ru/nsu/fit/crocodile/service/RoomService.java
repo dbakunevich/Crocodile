@@ -8,18 +8,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.nsu.fit.crocodile.controller.WebSocketController;
 import ru.nsu.fit.crocodile.exception.PlayerAlreadyInTheRoomException;
-import ru.nsu.fit.crocodile.message.Client.ClientChatMessage;
-import ru.nsu.fit.crocodile.message.Client.DrawMessage;
-import ru.nsu.fit.crocodile.message.Client.JoinMessage;
-import ru.nsu.fit.crocodile.message.Client.ReactionMessage;
-import ru.nsu.fit.crocodile.message.Server.GreetingMessage;
-import ru.nsu.fit.crocodile.message.Server.ImageUpdateMessage;
-import ru.nsu.fit.crocodile.message.Server.NewPlayerMessage;
-import ru.nsu.fit.crocodile.message.Server.PlayerImageRequest;
-import ru.nsu.fit.crocodile.model.*;
+import ru.nsu.fit.crocodile.message.Client.*;
+import ru.nsu.fit.crocodile.message.Server.*;
+import ru.nsu.fit.crocodile.model.ChatMessage;
+import ru.nsu.fit.crocodile.model.Image;
+import ru.nsu.fit.crocodile.model.Player;
+import ru.nsu.fit.crocodile.model.Room;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -50,7 +48,7 @@ public class RoomService {
         GreetingMessage greetingMessage;
         Player player = null;
         if (room == null) {
-            greetingMessage = new GreetingMessage(-1, "Комната с таким ID не найдена", null, null , 0);
+            greetingMessage = new GreetingMessage(-1, "Комната с таким ID не найдена", null, null, 0);
         } else {
             try {
                 player = room.addPlayer(message.getId(), message.getUsername(), headerAccessor.getUser());
@@ -115,7 +113,22 @@ public class RoomService {
             return; // TODO: 28.10.2022
         }
         ChatMessage chatMessage = room.getChat().addMessage(message.getMessage(), userId);
+        if (room.checkAnswer(message.getMessage()) && !room.isPaused()) {
+            room.pause();
+            chatMessage.setReaction(ChatMessage.Reaction.RIGHT);
+            room.addPoint(userId);
+            controller.getTemplate().convertAndSend("/topic/session/" + roomId, chatMessage);
+            startRound(room);
+            return;
+        }
         controller.getTemplate().convertAndSend("/topic/session/" + roomId, chatMessage);
+    }
+
+    public void startRound(Room room) {
+        Long masterId = room.generateMaster();
+        controller.getTemplate().convertAndSend("topic/session/" + room.getId(), new NewMasterMessage(masterId));
+        Set<String> answerSet = room.generateAnswers();
+        controller.getTemplate().convertAndSendToUser(room.getMaster().getPrincipal().getName(), "/queue/session", new AnswersChoice(answerSet));
     }
 
     public void react(ReactionMessage message, SimpMessageHeaderAccessor headerAccessor) {
@@ -133,6 +146,25 @@ public class RoomService {
         }
         room.getChat().react(message.getReaction(), message.getMessageId());
         controller.getTemplate().convertAndSend("/topic/session/" + roomId, message);
+    }
+
+    public void choose(MasterChoiceMessage message, SimpMessageHeaderAccessor headerAccessor) {
+        Principal user = headerAccessor.getUser();
+        Long roomId = (Long) headerAccessor.getSessionAttributes().get("roomId");
+        if (roomId == null) {
+            return; // TODO: 28.10.2022
+        }
+        Room room = rooms.get(roomId);
+        if (room == null) {
+            return; // TODO: 28.10.2022
+        }
+        if (!user.getName().equals(room.getMaster().getPrincipal().getName())) {
+            return; // TODO: 28.10.2022
+        }
+        if(room.getAnswerSet().contains(message.getChoice())){
+            room.start(message.getChoice());
+            controller.getTemplate().convertAndSend("/topic/session/" + roomId, new RoundStartMessage());
+        }
     }
 
 

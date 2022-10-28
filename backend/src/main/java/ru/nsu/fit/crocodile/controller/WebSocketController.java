@@ -8,10 +8,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import ru.nsu.fit.crocodile.message.Client.ClientChatMessage;
-import ru.nsu.fit.crocodile.message.Client.DrawMessage;
-import ru.nsu.fit.crocodile.message.Client.JoinMessage;
-import ru.nsu.fit.crocodile.message.Client.ReactionMessage;
+import ru.nsu.fit.crocodile.message.Client.*;
 import ru.nsu.fit.crocodile.message.Server.GreetingMessage;
 import ru.nsu.fit.crocodile.model.Image;
 import ru.nsu.fit.crocodile.model.test.TestAnswer;
@@ -64,6 +61,11 @@ public class WebSocketController {
     @MessageMapping("/session/react")
     public void react(ReactionMessage message, SimpMessageHeaderAccessor headerAccessor){
         roomService.react(message, headerAccessor);
+    }
+
+    @MessageMapping("/session/choose")
+    public void choose(MasterChoiceMessage message, SimpMessageHeaderAccessor headerAccessor){
+        roomService.choose(message, headerAccessor);
     }
 
 

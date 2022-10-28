@@ -10,7 +10,7 @@ public class ChatMessage {
 
     @ToString
     public enum Reaction{
-        NO_REACTION, LIKE, DISLIKE
+        NO_REACTION, LIKE, DISLIKE, RIGHT
     }
 
     private String message;
