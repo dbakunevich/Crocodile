@@ -8,7 +8,10 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import ru.nsu.fit.crocodile.message.Client.ClientChatMessage;
+import ru.nsu.fit.crocodile.message.Client.DrawMessage;
 import ru.nsu.fit.crocodile.message.Client.JoinMessage;
+import ru.nsu.fit.crocodile.message.Client.ReactionMessage;
 import ru.nsu.fit.crocodile.message.Server.GreetingMessage;
 import ru.nsu.fit.crocodile.model.Image;
 import ru.nsu.fit.crocodile.model.test.TestAnswer;
@@ -38,22 +41,6 @@ public class WebSocketController {
         roomService = new RoomService(this);
     }
 
-    @MessageMapping("/test")
-    //@SendTo("/topic/answer")
-    public void greeting(TestInput message, SimpMessageHeaderAccessor accessor) {
-        String s = (String) accessor.getSessionAttributes().get("prev");
-        log.info(accessor.getUser().getName());
-        if(s == null){
-            accessor.getSessionAttributes().put("prev", message.getContent());
-        }
-        else {
-            accessor.getSessionAttributes().put("prev", s.concat(message.getContent()));
-        }
-        template.convertAndSendToUser(accessor.getUser().getName(), "/queue/session", new TestAnswer("Input was: " + accessor.getSessionAttributes().get("prev") + accessor.getSessionAttributes().get("roomId")));
-        //return new TestAnswer("Input was: " + accessor.getSessionAttributes().get("prev") + accessor.getSessionAttributes().get("roomId"));
-
-    }
-
     @MessageMapping("/join/{roomId}")
     public void joinRoom(JoinMessage message, @DestinationVariable Long roomId, SimpMessageHeaderAccessor headerAccessor){
         roomService.joinGame(message, roomId, headerAccessor);
@@ -64,8 +51,19 @@ public class WebSocketController {
         waiting.forwardImage(headerAccessor.getUser(), image);
     }
 
-    public void testMessage (String message){
-        template.convertAndSend("/topic/answer", "message");
+    @MessageMapping("/session/draw")
+    public void drawEvent(DrawMessage message, SimpMessageHeaderAccessor headerAccessor){
+        roomService.draw(message, headerAccessor);
+    }
+
+    @MessageMapping("/session/chat")
+    public void chat(ClientChatMessage message, SimpMessageHeaderAccessor headerAccessor){
+        roomService.sendChatMessage(message, headerAccessor);
+    }
+
+    @MessageMapping("/session/react")
+    public void react(ReactionMessage message, SimpMessageHeaderAccessor headerAccessor){
+        roomService.react(message, headerAccessor);
     }
 
 

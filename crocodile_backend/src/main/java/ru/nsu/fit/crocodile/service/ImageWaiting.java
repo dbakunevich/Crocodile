@@ -21,5 +21,6 @@ public class ImageWaiting {
     public void forwardImage(Principal master, Image image){
         ArrayList<ImageSender> waiters = waitingUsers.get(master.getName());
         waiters.forEach(imageSender -> imageSender.send(image));
+        waiters.clear();
     }
 }
