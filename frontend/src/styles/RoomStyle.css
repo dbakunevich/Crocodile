@@ -1,17 +1,15 @@
 .imgw {
     position: absolute;
-    width: 469px;
-    height: 202px;
-    top: 8px;
-    left: 125px;
+    width: 25%;
+    top: 0.7%;
+    left: 6.6%;
 }
 
 .imgm {
     position: absolute;
-    width: 524px;
-    height: 194px;
-    left: 1110px;
-    top: 674px;
+    width: 28%;
+    left: 59.3%;
+    top: 70%;
 }
 
 .game-creation-button{
@@ -19,10 +17,10 @@
     text-align: center;
     color: #FFFFFF;
     border-width: 3px;
-    width: 426px;
-    height: 79px;
-    left: 1166px;
-    top:210px;
+    width: 22.8%;
+    height: 8.3%;
+    left: 62.2%;
+    top: 21.7%;
     background-color: #B7F46E;
     mix-blend-mode: normal;
     border-radius: 15px;
@@ -33,10 +31,10 @@
 
 .game-creation-field {
     position: absolute;
-    width: 426px;
-    height: 280px;
-    left: 1166px;
-    top: 367px;
+    width: 22.8%;
+    height: 29%;
+    left: 62.2%;
+    top: 38.2%;
     background-color: #FFFFFF;
     border-radius: 15px;
 }
@@ -47,10 +45,10 @@
     align-items: flex-start;
     padding: 0;
     position: absolute;
-    width: 987px;
-    height: 437px;
-    left: 87px;
-    top: 210px;
+    width: 52.6%;
+    height: 45.5%;
+    left: 4.63%;
+    top: 21.7%;
     border-radius: 15px;
     background-color: #FFFFFF;
 }
@@ -61,45 +59,60 @@
     color: #BFBE56;
     border-radius: 5px;
     position: absolute;
-    left: 150px;
-    top: 31px;
+    left: 35%;
+    top: 10.5%;
 }
 
-.lable-text {
+.lable-text1 {
     position: absolute;
-    left: 29px;
+    left: 6%;
     font-family: Inter;
     font-style: normal;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 20px;
+    font-size: 150%;
+    top: 15%;
+}
+
+.lable-text2 {
+    position: absolute;
+    left: 6%;
+    font-family: Inter;
+    font-style: normal;
+    font-size: 150%;
+    top: 35%;
+}
+
+.lable-text3 {
+    position: absolute;
+    left: 6%;
+    font-family: Inter;
+    font-style: normal;
+    font-size: 150%;
+    top: 55%;
 }
 
 .dictionaries{
     position: absolute;
-    width: 400px;
-    left: 13px;
-    top: 196px;
+    width: 94%;
+    left: 3%;
+    top: 70%;
     background-color: lightgray;
     border-radius: 15px;
-    max-height: 100px;
     font-family: Inter;
     font-style: normal;
     font-weight: 400;
-    font-size: 24px;
-    line-height: 20px;
+    font-size: 150%;
+
 }
 
 .number-players {
     position: absolute;
-    width: 93px;
-    height: 30px;
-    left: 220px;
-    top: 87px;
+    width: 21.8%;
+    height: 10.7%;
+    left: 51.6%;
+    top: 32.5%;
     border-color: lightgray;
     border-radius: 5px;
     font-style: normal;
     font-weight: 300;
-    font-size: 24px;
-    line-height: 30px;
+    font-size: 150%;
 }
