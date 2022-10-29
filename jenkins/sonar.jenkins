@@ -45,7 +45,7 @@ pipeline {
         stage("Quality Gate backend") {
             agent any
             options {
-                timeout(time: 5, unit: 'MINUTES') 
+                timeout(time: 1, unit: 'MINUTES') 
             }
             steps {
                 echo  " ============== Wait for Quality Gate backend ==================="                
