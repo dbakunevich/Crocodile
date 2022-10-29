@@ -28,7 +28,7 @@ pipeline {
                     dir ('backend') {
                         sh "mvn clean test"
                         sh "mvn sonar:sonar -Dsonar.projectKey=crocodile \
-                                            -Dsonar.host.url=http://51.250.29.194:9000 \
+                                            -Dsonar.host.url=http://0.0.0.0:9000 \
                                             -Dsonar.login=0848413059e15970aff0855ea36d7b8687323d6c \
                                             -Dmaven.test.failure.ignore=true \
                                             -Dsonar.jacoco.reportPaths=target/jacoco.exec \
@@ -79,7 +79,7 @@ pipeline {
         //                 sh "/opt/sonar-scanner/bin/sonar-scanner \
         //                                     -Dsonar.projectKey=market-front \
         //                                     -Dsonar.sources=. \
-        //                                     -Dsonar.host.url=http://51.250.108.33:9000 \
+        //                                     -Dsonar.host.url=http://0.0.0.0:9000 \
         //                                     -Dsonar.login=551e7af0a5eb0d2e2692738702d9c78577da4e8f \
         //                                     -Dsonar.login=admin -Dsonar.password=admin "
         //             }
