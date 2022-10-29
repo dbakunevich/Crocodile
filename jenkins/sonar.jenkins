@@ -19,11 +19,19 @@ pipeline {
                     }
                 }
             }
+            post {
+                success {
+                    updateGitlabCommitStatus name: 'sonar_build', state: 'success'
+                }
+                failure {
+                    updateGitlabCommitStatus name: 'sonar_build', state: 'failed'
+                }
+            }               
         }      
 
         stage("SonarQube analysis backend") {
             steps {
-                updateGitlabCommitStatus name: 'sonar_back_check', state: 'pending'                
+                updateGitlabCommitStatus name: 'sonar_back', state: 'pending'                
                 echo  " ================= start SonarQube analysis backend ==================="
                 withSonarQubeEnv('sonar') {
                     dir ('backend') {
@@ -40,23 +48,14 @@ pipeline {
                                             -Dsonar.java.coveragePlugin=jacoco "
                     }
                 }
-            }
-            post {
-                success {
-                    updateGitlabCommitStatus name: 'sonar_back_check', state: 'success'
-                }
-                failure {
-                    updateGitlabCommitStatus name: 'sonar_back_check', state: 'failed'
-                }
-            }             
+            }           
         }
         stage("Quality Gate backend") {
             agent any
             options {
-                timeout(time: 1, unit: 'MINUTES') 
+                timeout(time: 5, unit: 'MINUTES') 
             }
             steps {
-                updateGitlabCommitStatus name: 'sonar_back_QG', state: 'pending' 
                 echo  " ============== Wait for Quality Gate backend ==================="                
                 script {
                     withSonarQubeEnv('sonar') {
@@ -72,10 +71,10 @@ pipeline {
             }
             post {
                 success {
-                    updateGitlabCommitStatus name: 'sonar_back_QG', state: 'success'
+                    updateGitlabCommitStatus name: 'sonar_back', state: 'success'
                 }
                 failure {
-                    updateGitlabCommitStatus name: 'sonar_back_QG', state: 'failed'
+                    updateGitlabCommitStatus name: 'sonar_back', state: 'failed'
                 }
             }            
         }
