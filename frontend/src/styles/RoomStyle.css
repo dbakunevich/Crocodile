@@ -54,13 +54,15 @@
 }
 
 .checkbox-room {
-    width: 40px;
-    height: 40px;
+  /*  width: 40px;
+    height: 40px;*/
+    height: 10.7%;
+    width: 10.7%;
     color: #BFBE56;
-    border-radius: 5px;
+    border-radius: 0px;
     position: absolute;
     left: 35%;
-    top: 10.5%;
+    top: 12%;
 }
 
 .lable-text1 {
@@ -110,8 +112,9 @@
     height: 10.7%;
     left: 51.6%;
     top: 32.5%;
-    border-color: lightgray;
+    border-color: #E0E9BA;
     border-radius: 5px;
+    border-width: 1px;
     font-style: normal;
     font-weight: 300;
     font-size: 150%;
