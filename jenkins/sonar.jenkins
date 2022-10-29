@@ -28,14 +28,14 @@ pipeline {
                     dir ('backend') {
                         sh "mvn clean test"
                         sh "mvn sonar:sonar -Dsonar.projectKey=crocodile \
-                                            -Dsonar.host.url=http://0.0.0.0:9000 \
+                                            -Dsonar.host.url=http://51.250.29.194:9000 \
                                             -Dsonar.login=0848413059e15970aff0855ea36d7b8687323d6c \
                                             -Dmaven.test.failure.ignore=true \
                                             -Dsonar.jacoco.reportPaths=target/jacoco.exec \
                                             -Dsonar.core.codeCoveragePlugin=jacoco \
                                             -Dsonar.tests=src/test/java \
                                             -Djacoco.version=0.8.4 \
-                                            -Dsonar.java.coveragePlugin=jacoco "
+                                            -Dsonar.java.coveragePlugin=jacoco "                                          
                     }
                 }
             }
