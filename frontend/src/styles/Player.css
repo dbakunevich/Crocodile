@@ -68,7 +68,7 @@
     height: 70px;
 }
 
-.enter-button .input {
+.enter-button .chatInput {
     border: none;
     position: absolute;
     bottom: 25px;
@@ -77,9 +77,26 @@
     outline: none;
 }
 
-.enter-button .input .active{
-    border: none;
-    position: absolute;
-    bottom: 25px;
-    font-size: 20px;
+.likeImage {
+    width: 20px;
+    height: 31px;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin-top: 5px;
+    float: left;
+
 }
+
+.messageLine {
+    margin-bottom: 10px;
+    display: flex;
+    padding: 0;
+
+}
+
+.textOfMessage {
+    margin: 5px 0 0;
+    font-size: 20px;
+    padding: 0;
+}
+
