@@ -6,8 +6,8 @@ import RoomCreateComponent from "../components/roomComponent/RoomCreateComponent
 const RoomStore = () => {
     return(
         <div>
-            <img className="imgw" src="crocodileWelcoming.png" />
-            <img className="imgm" src="crocodileMarsh.png" />
+            <img className="imgw" alt="no foto" src="crocodileWelcoming.png" />
+            <img className="imgm" alt="no foto" src="crocodileMarsh.png" />
             <RoomCreateComponent/>
             <TableComponent/>
         </div>
