@@ -9,7 +9,7 @@ const RoomCreateComponent = () => {
     const newMessage = (e) => {
         let a = e.target.value;
         setMessage(a);
-        if (message == ''){
+        if (message === ''){
             document.getElementById('CountPlayers').style.color = "black";
         }
     }
