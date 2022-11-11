@@ -18,6 +18,9 @@ public class Room {
     private Chat chat;
     private boolean paused = false;
     private Set<String> answerSet;
+    private final long roundLength = 180000; //Этому тут не место, но пока пусть побудет тут.
+    private final Timer timer = new Timer();
+    private long startTime;
 
     public Room(Long id, String name) {
         this.id = id;
@@ -44,6 +47,7 @@ public class Room {
     public void start(String answer){
         this.answer = answer;
         paused = false;
+        startTime = System.currentTimeMillis();
     }
 
     public boolean checkAnswer(String answer) {

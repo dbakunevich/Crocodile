@@ -6,7 +6,6 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 public class AnswersChoice {
-    private Set<String> answers;
+    private final Set<String> answers;
 }

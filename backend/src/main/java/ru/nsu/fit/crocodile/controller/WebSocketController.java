@@ -21,13 +21,13 @@ import org.slf4j.LoggerFactory;
 
 @Controller
 public class WebSocketController {
+    @Autowired
     private RoomService roomService;
 
     @Getter
     @Autowired
     SimpMessagingTemplate template;
 
-    @Getter
     @Autowired
     ImageWaiting waiting;
 
@@ -35,7 +35,7 @@ public class WebSocketController {
 
 
     public WebSocketController(){
-        roomService = new RoomService(this);
+
     }
 
     @MessageMapping("/join/{roomId}")

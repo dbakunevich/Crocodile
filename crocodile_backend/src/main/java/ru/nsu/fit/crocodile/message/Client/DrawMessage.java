@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class DrawMessage {
-    private String changes;
+    private final String changes;
 }

@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class PlayerImageRequest {
-    final String request = "request";
+    private final String request = "request";
 }

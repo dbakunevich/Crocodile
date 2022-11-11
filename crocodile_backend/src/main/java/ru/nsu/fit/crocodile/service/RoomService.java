@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.nsu.fit.crocodile.controller.WebSocketController;
@@ -18,10 +19,11 @@ import ru.nsu.fit.crocodile.model.Room;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-@Component
 public class RoomService {
 
     private Logger log = LoggerFactory.getLogger(RoomService.class);
@@ -31,6 +33,9 @@ public class RoomService {
     private WebSocketController controller;
 
     @Autowired
+    private SimpMessagingTemplate template;
+    
+    @Autowired
     private ImageWaiting waiting;
 
     public RoomService(WebSocketController controller) {
@@ -38,7 +43,6 @@ public class RoomService {
         this.controller = controller;
     }
 
-    @Autowired
     public RoomService() { // TODO: 28.10.2022 Создание комнат
         rooms.put(1L, new Room(1L, "Test"));
     }
@@ -48,20 +52,22 @@ public class RoomService {
         GreetingMessage greetingMessage;
         Player player = null;
         if (room == null) {
-            greetingMessage = new GreetingMessage(-1, "Комната с таким ID не найдена", null, null, 0);
+            greetingMessage = new GreetingMessage(-1, "Комната с таким ID не найдена", null, null, 0, 0, 0);
         } else {
             try {
                 player = room.addPlayer(message.getId(), message.getUsername(), headerAccessor.getUser());
                 headerAccessor.getSessionAttributes().put("roomId", roomId);
                 headerAccessor.getSessionAttributes().put("userId", message.getId());
-                greetingMessage = new GreetingMessage(0, "", new ArrayList<>(room.getPlayers().values()), room.getChat(), room.getMasterId());
+                long roundLength = room.getRoundLength();
+                long timeLeft = roundLength - (System.currentTimeMillis() - room.getStartTime());
+                greetingMessage = new GreetingMessage(0, "", new ArrayList<>(room.getPlayers().values()), room.getChat(), room.getMasterId(), roundLength, timeLeft);
             } catch (PlayerAlreadyInTheRoomException e) {
-                greetingMessage = new GreetingMessage(-1, "Игрок с таким именем уже находится в этой комнате", null, null, 0);
+                greetingMessage = new GreetingMessage(-1, "Игрок с таким именем уже находится в этой комнате", null, null, 0, 0, 0);
             }
         }
-        controller.getTemplate().convertAndSendToUser(headerAccessor.getUser().getName(), "/queue/session", greetingMessage);
+        template.convertAndSendToUser(headerAccessor.getUser().getName(), "/queue/session", greetingMessage);
         if (greetingMessage.getCode() == 0) {
-            controller.getTemplate().convertAndSend("/topic/session/" + roomId, new NewPlayerMessage(message.getId()));
+            template.convertAndSend("/topic/session/" + roomId, new NewPlayerMessage(message.getId()));
             Player master = room.getPlayers().get(room.getMasterId());
             if (master != null) {
                 askForImage(player, room.getPlayers().get(room.getMasterId()));
@@ -70,12 +76,12 @@ public class RoomService {
     }
 
     private void askForImage(Player newPlayer, Player master) {
-        controller.getTemplate().convertAndSendToUser(master.getPrincipal().getName(), "/queue/session", new PlayerImageRequest());
-        controller.getWaiting().addWaiter(master, (image -> sendImage(newPlayer, image)));
+        template.convertAndSendToUser(master.getPrincipal().getName(), "/queue/session", new PlayerImageRequest());
+        waiting.addWaiter(master, (image -> sendImage(newPlayer, image)));
     }
 
     private void sendImage(Player newPlayer, Image image) {
-        controller.getTemplate().convertAndSendToUser(newPlayer.getPrincipal().getName(), "/queue/session", image);
+        template.convertAndSendToUser(newPlayer.getPrincipal().getName(), "/queue/session", image);
     }
 
     public void draw(DrawMessage message, SimpMessageHeaderAccessor headerAccessor) {
@@ -95,7 +101,7 @@ public class RoomService {
             return; // TODO: 28.10.2022
         }
         log.info(new ImageUpdateMessage(message).toString());
-        controller.getTemplate().convertAndSend("/topic/session/" + roomId, new ImageUpdateMessage(message));
+        template.convertAndSend("/topic/session/" + roomId, new ImageUpdateMessage(message));
     }
 
     public void sendChatMessage(ClientChatMessage message, SimpMessageHeaderAccessor headerAccessor) {
@@ -117,18 +123,18 @@ public class RoomService {
             room.pause();
             chatMessage.setReaction(ChatMessage.Reaction.RIGHT);
             room.addPoint(userId);
-            controller.getTemplate().convertAndSend("/topic/session/" + roomId, chatMessage);
+            template.convertAndSend("/topic/session/" + roomId, chatMessage);
             startRound(room);
             return;
         }
-        controller.getTemplate().convertAndSend("/topic/session/" + roomId, chatMessage);
+        template.convertAndSend("/topic/session/" + roomId, chatMessage);
     }
 
     public void startRound(Room room) {
         Long masterId = room.generateMaster();
-        controller.getTemplate().convertAndSend("topic/session/" + room.getId(), new NewMasterMessage(masterId));
+        template.convertAndSend("topic/session/" + room.getId(), new NewMasterMessage(masterId));
         Set<String> answerSet = room.generateAnswers();
-        controller.getTemplate().convertAndSendToUser(room.getMaster().getPrincipal().getName(), "/queue/session", new AnswersChoice(answerSet));
+        template.convertAndSendToUser(room.getMaster().getPrincipal().getName(), "/queue/session", new AnswersChoice(answerSet));
     }
 
     public void react(ReactionMessage message, SimpMessageHeaderAccessor headerAccessor) {
@@ -145,7 +151,7 @@ public class RoomService {
             return; // TODO: 28.10.2022
         }
         room.getChat().react(message.getReaction(), message.getMessageId());
-        controller.getTemplate().convertAndSend("/topic/session/" + roomId, message);
+        template.convertAndSend("/topic/session/" + roomId, message);
     }
 
     public void choose(MasterChoiceMessage message, SimpMessageHeaderAccessor headerAccessor) {
@@ -163,7 +169,14 @@ public class RoomService {
         }
         if(room.getAnswerSet().contains(message.getChoice())){
             room.start(message.getChoice());
-            controller.getTemplate().convertAndSend("/topic/session/" + roomId, new RoundStartMessage());
+            room.getTimer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    room.pause();
+                    startRound(room);
+                }
+            }, room.getRoundLength());
+            template.convertAndSend("/topic/session/" + roomId, new RoundStartMessage());
         }
     }
 

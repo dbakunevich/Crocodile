@@ -5,8 +5,8 @@ import ru.nsu.fit.crocodile.message.Client.DrawMessage;
 
 @Data
 public class ImageUpdateMessage {
-    private String changes;
-    private long timestamp;
+    private final String changes;
+    private final long timestamp;
 
     public ImageUpdateMessage(DrawMessage message){
         changes = message.getChanges();

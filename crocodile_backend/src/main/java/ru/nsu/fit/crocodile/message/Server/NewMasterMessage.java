@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class NewMasterMessage {
-    Long masterId;
+   private final Long masterId;
 }

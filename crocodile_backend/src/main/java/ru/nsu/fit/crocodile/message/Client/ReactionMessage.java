@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 import ru.nsu.fit.crocodile.model.ChatMessage;
 
 @Data
-@NoArgsConstructor
 public class ReactionMessage {
-    Integer messageId;
-    ChatMessage.Reaction reaction;
+    private final Integer messageId;
+    private final ChatMessage.Reaction reaction;
 }

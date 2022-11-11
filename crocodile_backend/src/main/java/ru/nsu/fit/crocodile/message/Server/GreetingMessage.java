@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 public class GreetingMessage {
-    private int code;
-    private String message;
-    private List<Player> players;
-    private Chat chat;
-    private long master;
+    private final int code;
+    private final String message;
+    private final List<Player> players;
+    private final Chat chat;
+    private final long master;
+    private final long roundTime;
+    private final long timeLeft;
 }

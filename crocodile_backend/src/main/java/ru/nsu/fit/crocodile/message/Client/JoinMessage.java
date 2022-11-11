@@ -2,8 +2,10 @@ package ru.nsu.fit.crocodile.message.Client;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 public class JoinMessage {
-    private Long id;
-    private String username;
+    private final Long id;
+    private final String username;
 }
