@@ -1,4 +1,5 @@
 import React from "react";
+import CommunityPart from "./CommunityPart";
 import "../../styles/Player.css"
 
 const Drawer = () => {
@@ -7,15 +8,17 @@ const Drawer = () => {
             <div className="draw-board" >drawing field</div>
             <div className="communication-part">
                 <div className="settings">settings</div>
-                <div className="chat">
-                    <div className="text-field">text field</div>
-                    <div className="enter-button">
-                        <input type="text" placeholder="Что же это а?.." className="input"></input>
-                        <img className="send-button" src="gameField/sendEmpty.png"/>
-                    </div>
-                </div>
+                <CommunityPart/>
             </div>
-            <div className="drawing-things">drawing things</div>
+            <div className="drawing-things">
+                <img className={"colorImage"} src={"gameField/yellow.png"} />
+                <img className={"colorImage"} src={"gameField/red.png"} />
+                <img className={"colorImage"} src={"gameField/black.png"} />
+                <img className={"colorImage"} src={"gameField/green.png"} />
+                <img className={"colorImage"} src={"gameField/blue.png"} />
+                <img className={"colorImage"} src={"gameField/brown.png"} />
+
+            </div>
         </div>
     )
 }
