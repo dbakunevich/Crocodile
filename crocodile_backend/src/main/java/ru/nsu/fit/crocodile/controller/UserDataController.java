@@ -5,11 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ru.nsu.fit.crocodile.dto.UserDto;
 import ru.nsu.fit.crocodile.model.UserData;
-import ru.nsu.fit.crocodile.request.*;
+import ru.nsu.fit.crocodile.request.ChangePasswordRequest;
+import ru.nsu.fit.crocodile.request.RegistrationRequest;
 import ru.nsu.fit.crocodile.service.UserDataService;
 
 import javax.management.InstanceAlreadyExistsException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -29,14 +32,14 @@ public class UserDataController {
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody RegistrationRequest request) {
         try {
-            Long userId = userDataService.saveUser(request.getEmail(), request.getUsername(), request.getPassword());
+            Long userId = userDataService.saveUser(request.getEmail(), request.getUsername(),
+                    request.getPassword(), "user");
             return new ResponseEntity<>(userId, HttpStatus.OK);
         } catch (InstanceAlreadyExistsException e) {
             return new ResponseEntity<>("User with this email already exist", HttpStatus.CONFLICT);
         }
     }
 
-    //TODO я в запросе почту отправляю, и в контексте проверок авторизации работает нормально, но как-то вроде id обычно используют
     @PostMapping("/changeName/{newName}")
     public HttpStatus changeName(@PathVariable String newName) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -82,7 +85,6 @@ public class UserDataController {
             e.printStackTrace();
             return HttpStatus.CONFLICT;
         }
-
     }
 
     @PostMapping("/acceptFriendRequest/{acceptedEmail}")
@@ -127,7 +129,8 @@ public class UserDataController {
     public ResponseEntity<Object> getOutcomingFriendRequests() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
-            return new ResponseEntity<>(userDataService.getOutcomingFriendRequests(auth.getName()), HttpStatus.OK);
+            List<UserDto> list = userDataService.getOutcomingFriendRequests(auth.getName());
+            return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.CONFLICT);

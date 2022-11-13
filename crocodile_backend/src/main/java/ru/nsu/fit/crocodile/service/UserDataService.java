@@ -19,13 +19,16 @@ public class UserDataService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    RoleService roleService;
+
     public UserData getUserByEmail(String email) {
         Optional<UserData> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent()) return userOpt.get();
         throw new NoSuchElementException();
     }
 
-    public Long saveUser(String email, String name, String password) throws InstanceAlreadyExistsException {
+    public Long saveUser(String email, String name, String password, String... roles) throws InstanceAlreadyExistsException {
         Optional<UserData> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent()) throw new InstanceAlreadyExistsException();
         UserData user = new UserData();
@@ -33,6 +36,7 @@ public class UserDataService {
         user.setPassword(Utils.passwordEncoder().encode(password));
         user.setUsername(name);
         user.setStatus(Status.ACTIVE);
+        user.setRoles(roleService.mapStringToRoles(roles));
         userRepository.save(user);
         return user.getId();
     }
