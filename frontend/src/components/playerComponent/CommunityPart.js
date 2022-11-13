@@ -1,14 +1,36 @@
-import React, {useEffect} from "react";
-import MessageStore from './MessageStore'
+import React, {useEffect, useState} from "react";
+import MessageList from './MessageList'
 
-
-let Messages = [];
 
 
 
 const CommunityPart = () => {
-    const[message, setMessage] = React.useState('');
-    const[activeIndex, setActiveIndex] = React.useState(0);
+    const [Messages, setMessages] = useState([])
+    const[message, setMessage] = useState('');
+    const[activeIndex, setActiveIndex] = useState(0);
+
+    useEffect(()=>{
+        const raw = localStorage.getItem('messages') || []
+        setMessages(JSON.parse(raw));
+    }, [])
+
+
+    useEffect(()=> {
+        localStorage.setItem('messages', JSON.stringify(Messages));
+    }, [Messages])
+
+
+    const addMessage = () => {
+        setMessages([
+            ...Messages,
+            {
+                id: Messages.length,
+                text: message,
+                liked: false,
+                disliked: false
+            }
+        ])
+    }
 
 
     const newMessage = (e) => {
@@ -22,7 +44,7 @@ const CommunityPart = () => {
 
     const sendClick = () => {
         if (message !== '') {
-            Messages.push(message);//warning на ключи
+            addMessage()//warning на ключи
             setMessage('');
             setActiveIndex(0);
         }
@@ -36,12 +58,10 @@ const CommunityPart = () => {
     }
 
 
-
-
     return (
         <div className="chat">
             <div className="text-field">
-                <MessageStore MessageHolder = {Messages}/>
+                <MessageList Messages={Messages}/>
                 </div>
             <div className="enter-button">
                 <input type="text" placeholder="Что же это а?.." className="chatInput" value={message} onChange={newMessage} onKeyUp={checkButton}></input>

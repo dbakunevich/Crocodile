@@ -10,7 +10,15 @@ const Drawer = () => {
                 <div className="settings">settings</div>
                 <CommunityPart/>
             </div>
-            <div className="drawing-things">drawing things</div>
+            <div className="drawing-things">
+                <img className={"colorImage"} src={"gameField/yellow.png"} />
+                <img className={"colorImage"} src={"gameField/red.png"} />
+                <img className={"colorImage"} src={"gameField/black.png"} />
+                <img className={"colorImage"} src={"gameField/green.png"} />
+                <img className={"colorImage"} src={"gameField/blue.png"} />
+                <img className={"colorImage"} src={"gameField/brown.png"} />
+
+            </div>
         </div>
     )
 }

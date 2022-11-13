@@ -16,7 +16,7 @@
 }
 
 .drawing-things {
-    padding: 50px;
+    padding: 40px;
     border-radius: 10px;
     background-color: white;
 }
@@ -62,10 +62,10 @@
 
 .send-button {
     position: absolute;
-    top: 5px;
+    top: 20px;
     right: 10px;
-    width: 70px;
-    height: 70px;
+    width: 40px;
+    height: 40px;
 }
 
 .enter-button .chatInput {
@@ -85,6 +85,15 @@
     margin-top: 5px;
     float: left;
 
+}
+
+.colorImage {
+    width: 30px;
+    height: 41px;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin-top: 0;
+    float: left;
 }
 
 .messageLine {
