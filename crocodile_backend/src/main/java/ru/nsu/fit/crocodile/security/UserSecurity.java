@@ -16,7 +16,7 @@ public class UserSecurity implements UserDetails {
 
     private final boolean isActive;
 
-    public UserSecurity(String username, String password, boolean isActive) {
+    public UserSecurity(Long id, String username, String password, boolean isActive) {
         this.username = username;
         this.password = password;
         this.isActive = isActive;
