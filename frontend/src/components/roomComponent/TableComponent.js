@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import '../../styles/RoomStyle.css';
-import ReactTable, {useTable} from "react-table";
+import {useTable} from "react-table";
 import {useSortBy} from "react-table";
 
 
