@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ru.nsu.fit.crocodile.Utils;
 import ru.nsu.fit.crocodile.dto.UserDto;
-import ru.nsu.fit.crocodile.model.UserData;
 import ru.nsu.fit.crocodile.request.ChangePasswordRequest;
 import ru.nsu.fit.crocodile.request.RegistrationRequest;
 import ru.nsu.fit.crocodile.service.UserDataService;
@@ -24,9 +24,10 @@ public class UserDataController {
         this.userDataService = userDataService;
     }
 
-    @GetMapping("getByEmail/{email}")
-    public UserData getUserByEmail(@PathVariable String email) {
-        return userDataService.getUserByEmail(email);
+    @GetMapping("getInfo")
+    public ResponseEntity<Object> getInfo() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return new ResponseEntity<>(Utils.userdataToDto(userDataService.getUserByEmail(auth.getName())), HttpStatus.OK);
     }
 
     @PostMapping("/register")
@@ -43,7 +44,6 @@ public class UserDataController {
     @PostMapping("/changeName/{newName}")
     public HttpStatus changeName(@PathVariable String newName) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //TODO: когда будут роли добавить админа
         try {
             userDataService.changeName(auth.getName(), newName);
             return HttpStatus.OK;
@@ -67,12 +67,6 @@ public class UserDataController {
             return new ResponseEntity<>("Old password field doesn't match existing password", HttpStatus.CONFLICT);
         }
     }
-
-//    @PostMapping("/logout")
-//    public String logout() {
-//        SecurityContextHolder.getContext().setAuthentication(null);
-//        return "redirect:/";
-//    }
 
     @PostMapping("/sendFriendRequest/{rcvEmail}")
     public HttpStatus sendFriendRequest(@PathVariable String rcvEmail) {

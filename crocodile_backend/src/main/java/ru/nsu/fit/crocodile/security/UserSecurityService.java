@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.nsu.fit.crocodile.model.Role;
 import ru.nsu.fit.crocodile.model.UserData;
+import ru.nsu.fit.crocodile.repository.RoleRepository;
 import ru.nsu.fit.crocodile.repository.UserRepository;
 
 import java.util.Collection;
@@ -22,9 +23,12 @@ public class UserSecurityService implements UserDetailsService {
 
     UserRepository userRepository;
 
+    RoleRepository roleRepository;
+
     @Autowired
-    public UserSecurityService(UserRepository userRepository) {
+    public UserSecurityService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -40,7 +44,7 @@ public class UserSecurityService implements UserDetailsService {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(UserData user) {
-        List<Role> roles = user.getRoles();
+        List<Role> roles = roleRepository.findAllByUsersContains(user);
         List<GrantedAuthority> authorities = new LinkedList<>();
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));

@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.request;
+package ru.nsu.fit.crocodile.request.admin_request;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.nsu.fit.crocodile.Utils;
 import ru.nsu.fit.crocodile.dto.UserDto;
+import ru.nsu.fit.crocodile.model.Role;
 import ru.nsu.fit.crocodile.model.Status;
 import ru.nsu.fit.crocodile.model.UserData;
+import ru.nsu.fit.crocodile.repository.RoleRepository;
 import ru.nsu.fit.crocodile.repository.UserRepository;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -21,6 +23,9 @@ public class UserDataService {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     public UserData getUserByEmail(String email) {
         Optional<UserData> userOpt = userRepository.findByEmail(email);
@@ -60,8 +65,10 @@ public class UserDataService {
     public void sendFriendRequest(String srcEmail, String rcvEmail) {
         UserData srcUser = getUserByEmail(srcEmail);
         UserData rcvUser = getUserByEmail(rcvEmail);
-        if (userRepository.findByIncomingFriendRequests(srcUser) != null) return;
-        if (userRepository.findByOutcomingFriendRequests(rcvUser) != null)
+        List<UserData> incReq = userRepository.findAllByOutcomingFriendRequestsContains(srcUser);
+        List<UserData> outcReq = userRepository.findAllByIncomingFriendRequestsContains(srcUser);
+        if (incReq.contains(rcvUser)) return;
+        if (outcReq.contains(rcvUser))
             throw new IllegalArgumentException("you already have incoming request from this user");
         srcUser.getOutcomingFriendRequests().add(rcvUser);
         userRepository.save(srcUser);
@@ -70,7 +77,7 @@ public class UserDataService {
     public void acceptFriendRequest(String acceptingEmail, String acceptedEmail) {
         UserData acceptingUser = getUserByEmail(acceptingEmail);
         UserData acceptedUser = getUserByEmail(acceptedEmail);
-        if (userRepository.findByIncomingFriendRequests(acceptingUser) == null)
+        if (userRepository.findAllByOutcomingFriendRequestsContains(acceptedUser) == null)
             throw new IllegalArgumentException("nothing to accept");
         acceptingUser.getFriends().add(acceptedUser);
         acceptedUser.getOutcomingFriendRequests().remove(acceptingUser);
