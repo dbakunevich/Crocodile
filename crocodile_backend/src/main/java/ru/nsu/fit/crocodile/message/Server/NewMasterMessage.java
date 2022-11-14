@@ -4,6 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class NewMasterMessage {
+public class NewMasterMessage extends ServerMessage{
    private final Long masterId;
 }

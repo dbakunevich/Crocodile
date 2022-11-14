@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Data
-public class GreetingMessage {
+public class GreetingMessage extends ServerMessage{
     private final int code;
     private final String message;
     private final List<Player> players;
