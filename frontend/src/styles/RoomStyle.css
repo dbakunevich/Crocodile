@@ -39,14 +39,14 @@
     border-radius: 15px;
 }
 
-.table {
+.table-component {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     padding: 0;
     position: absolute;
     width: 52.6%;
-    height: 45.5%;
+    min-height: 45.5%;
     left: 4.63%;
     top: 21.7%;
     border-radius: 15px;
@@ -117,3 +117,4 @@
     font-weight: 300;
     font-size: 150%;
 }
+
