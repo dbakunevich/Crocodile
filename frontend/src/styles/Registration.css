@@ -123,3 +123,19 @@
     position: absolute;
     left: 178px;
 }
+
+.eye-button{
+    border-radius: 15px;
+    background-color: #E0E9BA;
+    position: absolute;
+    top: 198px;
+    left: 435px;
+}
+
+.eyedb-button{
+    border-radius: 15px;
+    background-color: #E0E9BA;
+    position: absolute;
+    top: 267px;
+    left: 435px;
+}

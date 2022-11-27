@@ -104,3 +104,15 @@
     position: absolute;
     left: 240px;
 }
+
+.eye{
+    width: 20px;
+}
+
+.eye-button{
+    border-radius: 15px;
+    background-color: #E0E9BA;
+    position: absolute;
+    top: 127px;
+    left: 420px;
+}
