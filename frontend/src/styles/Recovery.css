@@ -8,6 +8,7 @@
     height: 360px;
     background-color: #FFFFFF;
     border-radius: 15px;
+
 }
 
 .info1{
@@ -52,6 +53,7 @@
     top: 200px;
     position: absolute;
     left: 100px;
+
 }
 
 .authorization-from-recovery{

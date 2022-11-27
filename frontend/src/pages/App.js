@@ -7,6 +7,7 @@ import Room from "./Room";
 import Authorization from "./Authorization";
 import Registration  from "./Registration";
 import Recovery from "./Recovery"
+import RecoveryResult from "./RecoveryResult";
 import React from "react";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
                     <Route path={'/Authorization'} element = <Authorization/> />
                     <Route path={'/Registration'} element=<Registration/> />
                     <Route path={'/Recovery'} element=<Recovery/> />
+                    <Route path={'/RecoveryResult'} element=<RecoveryResult/> />
                 </Routes>
             </div>
         </BrowserRouter>
