@@ -3,7 +3,7 @@
     margin-right: auto;
     position: absolute;
     left: 36.5%;
-    top: 20px;
+    top: 25%;
     width: 500px;
     height: 360px;
     background-color: #FFFFFF;
@@ -11,21 +11,15 @@
 
 }
 
-.info1{
+.info{
     top: 50px;
+    width: 400px;
+    left: 50px;
     position: absolute;
     font-weight: 300;
     font-size: 150%;
     font-style: normal;
-    left: 90px;
-}
-.info2{
-    top: 80px;
-    position: absolute;
-    font-weight: 300;
-    font-size: 150%;
-    font-style: normal;
-    left: 78px;
+    text-align: center;
 }
 
 .recovery-post{
