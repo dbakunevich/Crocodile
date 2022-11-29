@@ -1,48 +1,51 @@
 package ru.nsu.fit.crocodile.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.nsu.fit.crocodile.Utils;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.annotation.Resource;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     @Resource
     private UserDetailsService userDetailsService;
+
+    @Lazy
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http)
             throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(Utils.passwordEncoder())
+                .passwordEncoder(encoder)
                 .and()
                 .build();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
+        http
+                .csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+
+        http
                 .authorizeRequests()
-//                .antMatchers(HttpMethod.DELETE)
-//                .hasRole("ADMIN")
                 .antMatchers("/admin/**")
                 .hasAnyAuthority("ADMIN")
                 .antMatchers("/user/**")
@@ -57,17 +60,41 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .formLogin()
-//                .defaultSuccessUrl("/swagger-ui/index.html", true)
-//                .and()
                 .logout();
 
         return http.build();
     }
 
     @Bean
-    protected PasswordEncoder passwordEncoder() {
-        return Utils.passwordEncoder();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("*");
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//
+////        for (String s : AUTH_WHITELIST) {
+////            source.registerCorsConfiguration(s, config);
+////        }
+//        source.registerCorsConfiguration("*", config);
+//
+//
+//        return new CorsFilter(source);
+//    }
+//
+//    private static final String[] AUTH_WHITELIST = {
+//            "/authenticate",
+//            "/swagger-resources/**",
+//            "/swagger-ui/**",
+//            "/v3/api-docs",
+//            "/v2/api-docs",
+//            "/webjars/**"
+//    };
 }

@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdminDeleteFriendRequest {
-    private String deletingEmail;
-    private String deletedEmail;
+    private String userEmail;
+    private String friendEmail;
 }
 

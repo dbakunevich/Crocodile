@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AdminAcceptFriendRequest {
-    private String acceptingEmail;
-    private String acceptedEmail;
+    private String whoReceivedRequestEmail;
+    private String whoSentRequestEmail;
 }

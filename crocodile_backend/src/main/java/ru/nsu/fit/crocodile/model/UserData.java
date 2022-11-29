@@ -20,12 +20,20 @@ public class UserData {
 
     private String password;
 
+    @Column(unique = true)
     private String email;
 
-    @Enumerated(value = EnumType.ORDINAL)
+    @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "user_data__friends",
+            joinColumns =@JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id"
+            ))
     private List<UserData> friends = new LinkedList<>();
 
     @ManyToMany(mappedBy = "outcomingFriendRequests")
@@ -42,5 +50,5 @@ public class UserData {
             joinColumns =@JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"
             ))
-    private List<Role> roles = new LinkedList<>();
+    private List<Role> userRoles = new LinkedList<>();
 }

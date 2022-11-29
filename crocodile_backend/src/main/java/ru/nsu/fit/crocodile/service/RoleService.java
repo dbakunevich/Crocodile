@@ -1,42 +1,34 @@
 package ru.nsu.fit.crocodile.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.nsu.fit.crocodile.exception.ElementAlreadyExistException;
 import ru.nsu.fit.crocodile.model.Role;
 import ru.nsu.fit.crocodile.repository.RoleRepository;
 
 import javax.management.InstanceAlreadyExistsException;
-import java.util.LinkedList;
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RoleService {
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    public List<Role> mapStringToRoles(String... list) {//todo проверить подозрительное
-        List<Role> roles = new LinkedList<>();
-        for (String name : list) {
-            Optional<Role> opt = roleRepository.findByName(name);
-            if (!opt.isPresent()) {
-                throw new IllegalArgumentException("no such role");
-            }
-            roles.add(opt.get());
-        }
+    public List<Role> mapStringToRoles(List<String> list) {
+        List<Role> roles = roleRepository.findAllByNameIn(list);
+        if (roles.size() != list.size()) throw new IllegalArgumentException("no such role");
         return roles;
     }
 
-    public Long saveRole(String name) throws InstanceAlreadyExistsException {
-        Optional<Role> opt = roleRepository.findByName(name);
-        if (opt.isPresent()) {
-            throw new InstanceAlreadyExistsException();
+    @Transactional
+    public Long saveRole(String name) throws ElementAlreadyExistException {
+        if (roleRepository.existsByName(name)) {
+            throw new ElementAlreadyExistException("Role with such name already exists");
         }
         Role role = new Role();
         role.setName(name);
         roleRepository.save(role);
         return role.getId();
     }
-
 }

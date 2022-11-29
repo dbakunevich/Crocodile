@@ -1,6 +1,6 @@
 package ru.nsu.fit.crocodile.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,28 +16,19 @@ import ru.nsu.fit.crocodile.repository.UserRepository;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("user_security_service")
+@RequiredArgsConstructor
 public class UserSecurityService implements UserDetailsService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    RoleRepository roleRepository;
-
-    @Autowired
-    public UserSecurityService(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
+    private final RoleRepository roleRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<UserData> userOpt = userRepository.findByEmail(email);
-        if (!userOpt.isPresent()) {
-            throw new UsernameNotFoundException(email);
-        }
-        UserData user = userOpt.get();
+        UserData user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         return User.withUsername(user.getEmail())
                 .password(user.getPassword())
                 .authorities(getAuthorities(user)).build();
@@ -45,10 +36,12 @@ public class UserSecurityService implements UserDetailsService {
 
     public Collection<? extends GrantedAuthority> getAuthorities(UserData user) {
         List<Role> roles = roleRepository.findAllByUsersContains(user);
-        List<GrantedAuthority> authorities = new LinkedList<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));
-        }
-        return authorities;
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName().toUpperCase()))
+                .collect(Collectors.toList());
+//        List<GrantedAuthority> authorities = new LinkedList<>();
+//        for (Role role : roles) {
+//            authorities.add(new SimpleGrantedAuthority(role.getName().toUpperCase()));
+//        }
+//        return authorities;
     }
 }
