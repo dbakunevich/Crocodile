@@ -1,15 +1,20 @@
 package ru.nsu.fit.crocodile.message.Server;
 
-import lombok.Data;
+import lombok.Getter;
 import ru.nsu.fit.crocodile.message.Client.DrawMessage;
 
-@Data
+@Getter
 public class ImageUpdateMessage extends ServerMessage{
-    private final String changes;
-    private final long timestamp;
+    private String changes;
+    private long timestamp;
 
     public ImageUpdateMessage(DrawMessage message){
+        this();
         changes = message.getChanges();
         timestamp = System.nanoTime();
+    }
+
+    public ImageUpdateMessage(){
+        super(ServerMessageType.IMAGE_UPDATE);
     }
 }

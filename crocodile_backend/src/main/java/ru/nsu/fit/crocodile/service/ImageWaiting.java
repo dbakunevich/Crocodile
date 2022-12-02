@@ -13,9 +13,6 @@ public class ImageWaiting {
     private Map<String, ArrayList<ImageSender>> waitingUsers = new ConcurrentHashMap<>();
 
     public void addWaiter(Player master, ImageSender callback){
-        //waitingUsers.putIfAbsent(master.getPrincipal().getName(), new ArrayList<>());
-        //waitingUsers.get(master.getPrincipal().getName()).add(callback);
-
         waitingUsers.merge(master.getPrincipal().getName(), new ArrayList<>(List.of(callback)), (old, n) -> {
             old.add(callback);
             return old;
@@ -24,7 +21,9 @@ public class ImageWaiting {
 
     public void forwardImage(Principal master, Image image){
         ArrayList<ImageSender> waiters = waitingUsers.get(master.getName());
-        waiters.forEach(imageSender -> imageSender.send(image));
-        waiters.clear();
+        if(waiters != null) {
+            waiters.forEach(imageSender -> imageSender.send(image));
+            waiters.clear();
+        }
     }
 }

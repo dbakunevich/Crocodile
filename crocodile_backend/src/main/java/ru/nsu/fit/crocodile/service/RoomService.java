@@ -12,9 +12,7 @@ import ru.nsu.fit.crocodile.model.Player;
 import ru.nsu.fit.crocodile.model.Room;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -28,6 +26,12 @@ public class RoomService {
     @Autowired
     private MessageSender sender;
 
+    @Autowired
+    private ChatService chatService;
+
+    @Autowired
+    private AnswerGeneratorService answerGeneratorService;
+
     public RoomService() { // TODO: 28.10.2022 Создание комнат
         rooms.put(1L, new Room(1L, "Test"));
     }
@@ -40,7 +44,7 @@ public class RoomService {
             greetingMessage = new GreetingMessage(-1, "Комната с таким ID не найдена", null, null, 0, 0, 0);
         } else {
             try {
-                player = room.addPlayer(message.getId(), message.getUsername(), headerAccessor.getUser());
+                player = addPlayer(room, message.getId(), message.getUsername(), headerAccessor.getUser());
                 headerAccessor.getSessionAttributes().put("roomId", roomId);
                 headerAccessor.getSessionAttributes().put("userId", message.getId());
                 long roundLength = room.getRoundLength();
@@ -58,6 +62,26 @@ public class RoomService {
                 askForImage(player, room.getPlayers().get(room.getMasterId()));
             }
         }
+    }
+
+    private Player addPlayer(Room room, Long id, String username, Principal principal){
+        Player player = new Player(id, username, principal);
+        Map<Long, Player> players = room.getPlayers();
+        if (players.size() == 0) // TODO: 28.10.2022 Удалить после написания нормального старта игры
+            room.setMasterId(id);
+        if (players.putIfAbsent(id, player) != null) {
+            throw new PlayerAlreadyInTheRoomException();
+        } else {
+            return player;
+        }
+    }
+
+    public void addPoint(Room room, Long id){
+        room.getPlayers().get(id).getScore().addAndGet(1);
+    }
+
+    public void createRoom(Long id, String name){
+        rooms.put(id, new Room(id, name));
     }
 
     private void askForImage(Player newPlayer, Player master) {
@@ -105,11 +129,11 @@ public class RoomService {
             sender.sendToUser(new ErrorMessage("Попытка отправки сообщения от лица другого игрока"), user.getName());
             return;
         }
-        ChatMessage chatMessage = room.getChat().addMessage(message.getMessage(), userId);
-        if (room.checkAnswer(message.getMessage()) && !room.isPaused()) {
+        ChatMessage chatMessage = chatService.addMessage(room.getChat(),message.getMessage(), userId);
+        if (checkAnswer(room, message.getMessage()) && !room.isPaused()) {
             room.pause();
             chatMessage.setReaction(ChatMessage.Reaction.RIGHT);
-            room.addPoint(userId);
+            addPoint(room, userId);
             sender.sendToRoom(chatMessage, roomId);
             startRound(room);
             return;
@@ -117,14 +141,27 @@ public class RoomService {
         sender.sendToRoom(chatMessage, roomId);
     }
 
+    private boolean checkAnswer(Room room, String answer){
+        return room.getAnswer().equals(answer);
+    }
+
     public void startRound(Room room) {
-        Long masterId = room.generateMaster();
+        Long masterId = generateMaster(room);
         sender.sendToRoom(new NewMasterMessage(masterId), room.getId());
-        Set<String> answerSet = room.generateAnswers();
+        Set<String> answerSet = answerGeneratorService.generate();
+        room.setAnswerSet(answerSet);
         sender.sendToUser(new AnswersChoice(answerSet), room.getMaster().getPrincipal().getName());
     }
 
-    public void react(ReactionMessage message, SimpMessageHeaderAccessor headerAccessor) {
+    private Long generateMaster(Room room) {
+        Random random = new Random();
+        List<Long> keys = new ArrayList<>(room.getPlayers().keySet());
+        Long newMaster = keys.get(random.nextInt(keys.size()));
+        room.setMasterId(newMaster);
+        return newMaster;
+    }
+
+    public void react(ClientReactionMessage message, SimpMessageHeaderAccessor headerAccessor) {
         Principal user = headerAccessor.getUser();
         Long roomId = (Long) headerAccessor.getSessionAttributes().get("roomId");
         if (roomId == null) {
@@ -140,8 +177,8 @@ public class RoomService {
             sender.sendToUser(new ErrorMessage("Попытка отправки реакции от лица другого игрока"), user.getName());
             return;
         }
-        room.getChat().react(message.getReaction(), message.getMessageId());
-        sender.sendToRoom(message, roomId);
+        chatService.react(room.getChat(), message.getReaction(), message.getMessageId());
+        sender.sendToRoom(new ServerReactionMessage(message), roomId);
     }
 
     public void choose(MasterChoiceMessage message, SimpMessageHeaderAccessor headerAccessor) {

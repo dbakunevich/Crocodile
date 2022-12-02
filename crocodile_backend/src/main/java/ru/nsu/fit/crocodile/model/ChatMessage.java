@@ -1,12 +1,11 @@
 package ru.nsu.fit.crocodile.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import ru.nsu.fit.crocodile.message.Server.ServerMessage;
+import ru.nsu.fit.crocodile.message.Server.ServerMessageType;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 public class ChatMessage extends ServerMessage {
 
     @ToString
@@ -18,4 +17,16 @@ public class ChatMessage extends ServerMessage {
     private Long userId;
     private Integer MessageId;
     private Reaction reaction;
+
+    public ChatMessage(String message, Long userId, Integer messageId, Reaction reaction) {
+        this();
+        this.message = message;
+        this.userId = userId;
+        MessageId = messageId;
+        this.reaction = reaction;
+    }
+
+    public ChatMessage() {
+        super(ServerMessageType.CHAT_MESSAGE);
+    }
 }

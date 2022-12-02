@@ -1,8 +1,11 @@
 package ru.nsu.fit.crocodile.message.Server;
 
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class RoundStartMessage extends ServerMessage{
-    private final String start = "start";
+    public RoundStartMessage() {
+        super(ServerMessageType.ROUND_START);
+    }
 }

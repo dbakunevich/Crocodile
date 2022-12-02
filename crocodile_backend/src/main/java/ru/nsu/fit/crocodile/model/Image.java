@@ -1,13 +1,21 @@
 package ru.nsu.fit.crocodile.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.nsu.fit.crocodile.message.Server.ServerMessage;
+import ru.nsu.fit.crocodile.message.Server.ServerMessageType;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class Image extends ServerMessage {
     String imageData;
+
+    public Image(String imageData) {
+        this();
+        this.imageData = imageData;
+    }
+
+
+    public Image() {
+        super(ServerMessageType.IMAGE);
+    }
 }

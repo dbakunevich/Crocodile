@@ -4,15 +4,12 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import ru.nsu.fit.crocodile.message.Client.*;
-import ru.nsu.fit.crocodile.message.Server.GreetingMessage;
+import ru.nsu.fit.crocodile.message.Client.DrawMessage;
 import ru.nsu.fit.crocodile.model.Image;
-import ru.nsu.fit.crocodile.model.test.TestAnswer;
-import ru.nsu.fit.crocodile.model.test.TestInput;
 import ru.nsu.fit.crocodile.service.ImageWaiting;
 import ru.nsu.fit.crocodile.service.RoomService;
 import org.slf4j.Logger;
@@ -59,7 +56,7 @@ public class WebSocketController {
     }
 
     @MessageMapping("/session/react")
-    public void react(ReactionMessage message, SimpMessageHeaderAccessor headerAccessor){
+    public void react(ClientReactionMessage message, SimpMessageHeaderAccessor headerAccessor){
         roomService.react(message, headerAccessor);
     }
 

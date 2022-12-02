@@ -6,7 +6,16 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Set;
 
-@Data
+@Getter
 public class AnswersChoice extends ServerMessage {
-    private final Set<String> answers;
+    private Set<String> answers;
+
+    public AnswersChoice(Set<String> answers) {
+        this();
+        this.answers = answers;
+    }
+
+    public AnswersChoice(){
+        super(ServerMessageType.ANSWERS_CHOICE);
+    }
 }

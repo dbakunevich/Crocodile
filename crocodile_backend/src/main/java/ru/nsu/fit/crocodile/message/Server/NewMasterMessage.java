@@ -2,8 +2,18 @@ package ru.nsu.fit.crocodile.message.Server;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class NewMasterMessage extends ServerMessage{
-   private final Long masterId;
+   private Long masterId;
+
+   public NewMasterMessage(Long masterId) {
+      this();
+      this.masterId = masterId;
+   }
+
+   public NewMasterMessage(){
+      super(ServerMessageType.NEW_MASTER);
+   }
 }
