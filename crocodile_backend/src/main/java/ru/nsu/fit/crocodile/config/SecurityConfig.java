@@ -70,31 +70,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(12);
     }
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("*");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//
-////        for (String s : AUTH_WHITELIST) {
-////            source.registerCorsConfiguration(s, config);
-////        }
-//        source.registerCorsConfiguration("*", config);
-//
-//
-//        return new CorsFilter(source);
-//    }
-//
-//    private static final String[] AUTH_WHITELIST = {
-//            "/authenticate",
-//            "/swagger-resources/**",
-//            "/swagger-ui/**",
-//            "/v3/api-docs",
-//            "/v2/api-docs",
-//            "/webjars/**"
-//    };
 }

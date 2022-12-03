@@ -25,7 +25,7 @@ import java.util.List;
 public class UserController {
     private final UserDataService userDataService;
 
-    @GetMapping("get-info")
+    @GetMapping("/get-info")
     public ResponseEntity<UserDto> getInfo() throws NoSuchElementException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(UserDataUtils.userdataToDto(userDataService.getUserByEmail(auth.getName())), HttpStatus.OK);

@@ -22,7 +22,7 @@ public class AdminController {
     private final UserDataService userDataService;
 
 
-    @GetMapping("get-by-email/{email}")
+    @GetMapping("/get-by-email/{email}")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) throws NoSuchElementException {
         return new ResponseEntity<>(UserDataUtils.userdataToDto(userDataService.getUserByEmail(email)), HttpStatus.OK);
     }
