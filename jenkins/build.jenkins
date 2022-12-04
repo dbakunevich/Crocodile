@@ -71,23 +71,41 @@ pipeline {
                     }
             }             
         }
-        // stage("create and run docker image for frontend") {
-        //     steps {
-        //         echo " ============== start building docker image =================="
-        //         dir ('frontend') {
-        //             sh 'docker 2>/dev/null 1>&2 stop app_front || true'
-        //             sh 'docker 2>/dev/null 1>&2 rmi frontend-app:release || true'
-        //         	sh 'docker build -t frontend-app:release . '
-        //         }
-        //     }
-        // }
-        // stage("run docker container for frontend") {
-        //     steps {
-        //         echo " ============== run docker container ========================="
-        //         sh 'docker run --rm --name app_front -d -p 3000:3000 frontend-app:release'
-        //         sh 'docker ps'
-        //         sh 'docker logs app_front'
-        //     }
-        // }
+        stage("Create and run docker image for frontend") {
+            steps {
+                updateGitlabCommitStatus name: 'build_docker_front', state: 'pending'
+                echo " ============== start building docker image =================="
+                dir ('frontend') {
+                    sh 'docker 2>/dev/null 1>&2 stop app_front || true'
+                    sh 'docker 2>/dev/null 1>&2 rmi frontend-app:release || true'
+                	sh 'docker build -t frontend-app:release . '
+                }
+            }
+            post {
+                success {
+                    updateGitlabCommitStatus name: 'build_docker_front', state: 'success'
+                    }
+                failure {
+                    updateGitlabCommitStatus name: 'build_docker_front', state: 'failed'
+                    }
+            }            
+        }
+        stage("Run docker container for frontend") {
+            steps {
+                updateGitlabCommitStatus name: 'run_docker_front', state: 'pending'
+                echo " ============== run docker container ========================="
+                sh 'docker run --rm --name app_front -d -p 3001:3001 frontend-app:release'
+                sh 'docker ps'
+                sh 'docker logs app_front'
+            }
+            post {
+                success {
+                    updateGitlabCommitStatus name: 'run_docker_front', state: 'success'
+                    }
+                failure {
+                    updateGitlabCommitStatus name: 'run_docker_front', state: 'failed'
+                    }
+            }               
+        }
     }
 }

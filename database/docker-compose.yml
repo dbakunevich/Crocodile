@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:         
   db:
@@ -8,9 +8,13 @@ services:
       - POSTGRES_USER=compose-postgres
       - POSTGRES_PASSWORD=compose-postgres
       - POSTGRES_DB=db
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_HOST=51.250.29.194
 
     expose:
         - "6666" # Publishes 6666 to other containers but NOT to host machine
     ports:
         - "6666:6666"
+    volumes:
+      - ./backups:/home/backups        
     command: -p 6666
