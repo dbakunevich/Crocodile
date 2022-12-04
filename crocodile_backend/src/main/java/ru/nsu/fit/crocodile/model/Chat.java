@@ -10,8 +10,4 @@ import java.util.List;
 @NoArgsConstructor
 public class Chat {
     private List<ChatMessage> messages = new ArrayList<>();
-
-    synchronized public void clear(){
-        messages.clear();
-    }
 }

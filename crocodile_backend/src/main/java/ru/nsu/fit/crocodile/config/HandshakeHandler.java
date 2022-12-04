@@ -9,7 +9,7 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.UUID;
 
-public class HanshakeHandler extends DefaultHandshakeHandler {
+public class HandshakeHandler extends DefaultHandshakeHandler {
 
     @Override
     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {

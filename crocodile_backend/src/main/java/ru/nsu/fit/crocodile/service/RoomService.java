@@ -130,8 +130,7 @@ public class RoomService {
             return;
         }
         ChatMessage chatMessage = chatService.addMessage(room.getChat(),message.getMessage(), userId);
-        if (checkAnswer(room, message.getMessage()) && !room.isPaused()) {
-            room.pause();
+        if (checkAnswer(room, message.getMessage()) && room.getPaused().compareAndSet(false, true)) {
             chatMessage.setReaction(ChatMessage.Reaction.RIGHT);
             addPoint(room, userId);
             sender.sendToRoom(chatMessage, roomId);
@@ -202,7 +201,7 @@ public class RoomService {
             room.getTimer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    room.pause();
+                    room.getPaused().set(true);
                     startRound(room);
                 }
             }, room.getRoundLength());

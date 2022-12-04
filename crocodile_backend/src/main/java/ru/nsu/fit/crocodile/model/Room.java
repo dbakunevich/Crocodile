@@ -7,6 +7,7 @@ import ru.nsu.fit.crocodile.exception.PlayerAlreadyInTheRoomException;
 import java.security.Principal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class Room {
     private Long masterId = 0L;
     private String answer = "default";
     private Chat chat;
-    private boolean paused = false;
+    private AtomicBoolean paused = new AtomicBoolean(false);
     private Set<String> answerSet;
     private final long roundLength = 180000; //Этому тут не место, но пока пусть побудет тут.
     private final Timer timer = new Timer();
@@ -32,12 +33,8 @@ public class Room {
 
     public void start(String answer){
         this.answer = answer;
-        paused = false;
+        paused.set(false);
         startTime = System.currentTimeMillis();
-    }
-
-    synchronized public void pause() {
-        paused = true;
     }
 
     public Player getMaster() {
