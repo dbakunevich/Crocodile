@@ -57,7 +57,7 @@ pipeline {
             steps {
                 updateGitlabCommitStatus name: 'run_docker_back', state: 'pending'
                 echo " ============== run docker container ========================="
-                sh 'docker run --rm --net=host --name  backend_jenkins -d -p 8181:8181 backend_crocodile:release'
+                sh 'docker run --rm --net=host --name  backend_jenkins -t -d -p 8181:8181 backend_crocodile:release'
                 sh 'docker ps'
                 sh 'docker logs backend_jenkins'
                 sh 'docker exec -it backend_jenkins kill 1'
@@ -94,7 +94,7 @@ pipeline {
             steps {
                 updateGitlabCommitStatus name: 'run_docker_front', state: 'pending'
                 echo " ============== run docker container ========================="
-                sh 'docker run --rm --name app_front -d -p 3001:3001 frontend-app:release'
+                sh 'docker run --rm --name app_front -t -d -p 3001:3001 frontend-app:release'
                 sh 'docker ps'
                 sh 'docker logs app_front'
                 sh 'docker exec -it app_front kill 1'
