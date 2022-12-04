@@ -139,3 +139,35 @@
     top: 267px;
     left: 435px;
 }
+
+.name-occupied{
+    font-style: normal;
+    top: 30px;
+    position: absolute;
+    left: 160px;
+    color: #FFFFFF;
+}
+
+.email-occupied{
+    font-style: normal;
+    top: 100px;
+    position: absolute;
+    left: 130px;
+    color: #FFFFFF;
+}
+
+.password-short{
+    font-style: normal;
+    top: 170px;
+    position: absolute;
+    left: 120px;
+    color: #FFFFFF;
+}
+
+.not-match{
+    font-style: normal;
+    top: 240px;
+    position: absolute;
+    left: 170px;
+    color: #FFFFFF;
+}

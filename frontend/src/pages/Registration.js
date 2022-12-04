@@ -9,13 +9,30 @@ class Registration extends Component {
             hiddenfirst: true,
             passwordfirst: '',
             hiddensecond: true,
-            passwordsecnd: '',
+
+            passwordsecond: '',
         };
 
         this.handlePasswordChangeFirst = this.handlePasswordChangeFirst.bind(this);
         this.toggleShowFirst = this.toggleShowFirst.bind(this);
         this.handlePasswordChangeSecond = this.handlePasswordChangeSecond.bind(this);
         this.toggleShowSecond = this.toggleShowSecond.bind(this);
+        this.checkreg = this.checkreg.bind(this);
+    }
+
+    checkreg() {
+        document.getElementById('email-occupied').style.color = "#FFFFFF";
+        document.getElementById('name-occupied').style.color = "#FFFFFF";
+        document.getElementById('not-match').style.color = "#FFFFFF";
+        document.getElementById('password-short').style.color = "#FFFFFF";
+        if (this.state.passwordfirst !== this.state.passwordsecond) {
+            document.getElementById('not-match').style.color = "red";
+        }
+        if (this.state.passwordfirst.length < 5){
+            document.getElementById('password-short').style.color = "red";
+        }
+        document.getElementById('email-occupied').style.color = "red";
+        document.getElementById('name-occupied').style.color = "red";
     }
 
     handlePasswordChangeFirst(e) {
@@ -26,8 +43,8 @@ class Registration extends Component {
         this.setState({ hiddenfirst: !this.state.hiddenfirst });
     }
 
-    handlePasswordChangeSecond(e) {
-        this.setState({ passwordsecond: e.target.value });
+    handlePasswordChangeSecond(c) {
+        this.setState({ passwordsecond: c.target.value });
     }
 
     toggleShowSecond() {
@@ -47,10 +64,13 @@ class Registration extends Component {
         return (
             <div className="regist">
                 <label className="nickname-lable"> Никнейм:</label>
+                <label className="name-occupied" id = 'name-occupied'>Данное имя уже занято</label>
                 <input className="nickname" type="text"/>
                 <label className="post-lable"> Почта:</label>
+                <label className="email-occupied" id = 'email-occupied'>К данной почте уже привязанаккаунт </label>
                 <input className="post" type="text"/>
                 <label className="password-lable"> Пароль:</label>
+                <label className="password-short" id = 'password-short'>Пароль слишком короткий - минимум 5 символов</label>
                 <input className="password"
                        type={this.state.hiddenfirst ? 'password' : 'text'}
                        value={this.state.passwordfirst}
@@ -59,14 +79,15 @@ class Registration extends Component {
                     <img className="eye" alt="no foto" src="eye.png"/>
                 </button>
                 <label className="passworddb-lable"> Повторите пароль:</label>
-                <input className="passworddb"
+                <label className="not-match" id = 'not-match'> Пароли несовпадают</label>
+                <input className="passworddb" id = 'passworddb'
                        type={this.state.hiddensecond ? 'password' : 'text'}
                        value={this.state.passwordsecond}
                        onChange={this.handlePasswordChangeSecond}/>
                 <button className="eyedb-button" onClick={this.toggleShowSecond}>
                     <img className="eye" alt="no foto" src="eye.png"/>
                 </button>
-                <button className="reg-button"> Зарегистрироваться </button>
+                <button className="reg-button" onClick={this.checkreg}> Зарегистрироваться </button>
                 <a className="authorization" href='/Authorization' > Уже есть аккаунт</a>
             </div>
         );

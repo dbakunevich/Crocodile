@@ -116,3 +116,19 @@
     top: 127px;
     left: 420px;
 }
+
+.email-exists{
+    font-style: normal;
+    top: 30px;
+    position: absolute;
+    left: 110px;
+    color: #FFFFFF;
+}
+
+.incorrect-password{
+    font-style: normal;
+    top: 100px;
+    position: absolute;
+    left: 180px;
+    color: #FFFFFF;
+}
