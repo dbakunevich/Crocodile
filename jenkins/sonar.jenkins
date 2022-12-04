@@ -16,6 +16,7 @@ pipeline {
                 withSonarQubeEnv('sonar') {
                     dir ('backend') {
                         sh "git checkout dev"
+                        sh "git pull"
                         sh "sudo /opt/sonarqube/bin/linux-x86-64/sonar.sh start || true"
                     }
                 }
