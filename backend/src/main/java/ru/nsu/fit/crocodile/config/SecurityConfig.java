@@ -50,8 +50,6 @@ public class SecurityConfig {
                 .hasAnyAuthority("ADMIN")
                 .antMatchers("/user/**")
                 .hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/login/**")
-                .anonymous()
                 .anyRequest()
                 .authenticated()
                 .and()

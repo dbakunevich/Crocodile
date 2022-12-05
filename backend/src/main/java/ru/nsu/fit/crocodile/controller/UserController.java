@@ -1,6 +1,7 @@
 package ru.nsu.fit.crocodile.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -8,12 +9,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.nsu.fit.crocodile.UserDataUtils;
 import ru.nsu.fit.crocodile.dto.UserDto;
+import ru.nsu.fit.crocodile.event.OnPasswordResetEvent;
+import ru.nsu.fit.crocodile.exception.BadTokenException;
 import ru.nsu.fit.crocodile.exception.ChangePasswordException;
 import ru.nsu.fit.crocodile.exception.ElementAlreadyExistException;
 import ru.nsu.fit.crocodile.exception.NoSuchElementException;
 import ru.nsu.fit.crocodile.model.RoleEnum;
 import ru.nsu.fit.crocodile.model.Status;
+import ru.nsu.fit.crocodile.model.UserData;
 import ru.nsu.fit.crocodile.request.*;
+import ru.nsu.fit.crocodile.event.OnRegistrationCompleteEvent;
 import ru.nsu.fit.crocodile.service.UserDataService;
 
 import java.util.Collections;
@@ -25,6 +30,9 @@ import java.util.List;
 public class UserController {
     private final UserDataService userDataService;
 
+    private final ApplicationEventPublisher eventPublisher;
+
+
     @GetMapping("/get-info")
     public ResponseEntity<UserDto> getInfo() throws NoSuchElementException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -33,9 +41,33 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Long> register(@RequestBody RegistrationRequest request) throws ElementAlreadyExistException {
-        Long userId = userDataService.saveUser(request.getEmail(), request.getUsername(),
-                request.getPassword(), Status.ACTIVE, Collections.singletonList(RoleEnum.USER.name()));
-        return new ResponseEntity<>(userId, HttpStatus.OK);
+        UserData user = userDataService.createUser(request.getEmail(), request.getUsername(),
+                request.getPassword(), Status.NOT_ENABLED, Collections.singletonList(RoleEnum.USER.name()));
+
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user));
+
+        return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+    }
+
+    @GetMapping("/registration-confirm")
+    public ResponseEntity<HttpStatus> confirmRegistration(@RequestParam("token") String token) throws BadTokenException {
+        userDataService.activateUser(token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<HttpStatus> resetPassword(@RequestParam("email") String userEmail) throws NoSuchElementException {
+        UserData user = userDataService.getUserByEmail(userEmail);
+
+        eventPublisher.publishEvent(new OnPasswordResetEvent(user));
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/password-reset-confirm")
+    public ResponseEntity<HttpStatus> confirmPasswordReset(@RequestBody PasswordResetRequest request) throws BadTokenException, ChangePasswordException {
+        userDataService.confirmPasswordReset(request.getToken(), request.getOldPassword(), request.getNewPassword());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/change-name")

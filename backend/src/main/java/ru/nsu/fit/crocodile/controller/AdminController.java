@@ -10,6 +10,7 @@ import ru.nsu.fit.crocodile.exception.ChangePasswordException;
 import ru.nsu.fit.crocodile.exception.ElementAlreadyExistException;
 import ru.nsu.fit.crocodile.exception.NoSuchElementException;
 import ru.nsu.fit.crocodile.model.Status;
+import ru.nsu.fit.crocodile.model.UserData;
 import ru.nsu.fit.crocodile.request.admin_request.*;
 import ru.nsu.fit.crocodile.service.UserDataService;
 
@@ -29,9 +30,9 @@ public class AdminController {
 
     @PostMapping("/register")
     public ResponseEntity<Long> register(@RequestBody AdminRegistrationRequest request) throws ElementAlreadyExistException {
-        Long userId = userDataService.saveUser(request.getEmail(), request.getUsername(),
+        UserData user = userDataService.createUser(request.getEmail(), request.getUsername(),
                 request.getPassword(), Status.ACTIVE, request.getRoles());
-        return new ResponseEntity<>(userId, HttpStatus.OK);
+        return new ResponseEntity<>(user.getId(), HttpStatus.OK);
     }
 
     @PostMapping("/change-name")

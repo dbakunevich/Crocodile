@@ -18,8 +18,4 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     List<Role> findAllByUsersContains(UserData user);
 
     List<Role> findAllByNameIn(List<String> name);
-//
-//    @Query("SELECT (count(r) = :size) from Role r where r.name in :names having size(:names) = count(r)")
-//    boolean isContainsNRolesWIthNamesIn(int size, List<String> names);
-
 }

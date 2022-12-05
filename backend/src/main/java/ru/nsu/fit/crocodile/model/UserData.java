@@ -28,7 +28,8 @@ public class UserData {
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.REMOVE
     })
     @JoinTable(name = "user_data__friends",
             joinColumns =@JoinColumn(name = "user_id"),
@@ -44,7 +45,8 @@ public class UserData {
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.REMOVE
     })
     @JoinTable(name = "user_data__roles",
             joinColumns =@JoinColumn(name = "user_id"),
