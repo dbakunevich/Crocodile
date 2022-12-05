@@ -8,6 +8,7 @@ class About extends Component {
                 <a href="/About"> About</a>
                 <a href="/"> Home</a>
                 <a href='/Room'>Игрок</a>
+                <a href='/Authorization' > Вход</a>
                 <p>Home</p>
             </div>
         );
