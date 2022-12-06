@@ -1,10 +1,12 @@
 import {useOnDraw} from './CustomHooks';
+import React from "react";
 
 const Canvas = ({CanWidth, CanHeight, color, width}) => {
 
     const {setCanvasRef, onCanvasMouseDown} = useOnDraw(onDraw);
 
     function onDraw(ctx, point, prevPoint) {
+        
         drawLine(prevPoint, point, ctx, color, width);
     }
 
@@ -13,7 +15,7 @@ const Canvas = ({CanWidth, CanHeight, color, width}) => {
     }
 
     function drawLine(start, end, ctx, color, width) {
-        start = start ?? end;
+        start = (start !== null && start !== undefined) ? start : end;
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.moveTo(start.x, start.y);
