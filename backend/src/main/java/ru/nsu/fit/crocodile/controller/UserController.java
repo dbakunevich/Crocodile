@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.controller;
+/*package ru.nsu.fit.crocodile.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -90,4 +90,4 @@ public class UserController {
         userDataService.deleteFriend(auth.getName(), request.getFriendEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-}
+}*/

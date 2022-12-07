@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.security;
+/*package ru.nsu.fit.crocodile.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,3 +45,4 @@ public class UserSecurityService implements UserDetailsService {
 //        return authorities;
     }
 }
+*/

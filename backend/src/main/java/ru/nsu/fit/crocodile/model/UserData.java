@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.model;
+/*package ru.nsu.fit.crocodile.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -51,4 +51,4 @@ public class UserData {
             inverseJoinColumns = @JoinColumn(name = "role_id"
             ))
     private List<Role> userRoles = new LinkedList<>();
-}
+}*/

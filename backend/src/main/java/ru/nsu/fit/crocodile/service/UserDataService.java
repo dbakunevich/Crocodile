@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.service;
+/*package ru.nsu.fit.crocodile.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,7 +10,7 @@ import ru.nsu.fit.crocodile.exception.ElementAlreadyExistException;
 import ru.nsu.fit.crocodile.exception.NoSuchElementException;
 import ru.nsu.fit.crocodile.model.Status;
 import ru.nsu.fit.crocodile.model.UserData;
-import ru.nsu.fit.crocodile.repository.UserRepository;
+//import ru.nsu.fit.crocodile.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class UserDataService {
 
-    private final UserRepository userRepository;
+    //private final UserRepository userRepository;
 
     private final RoleService roleService;
 
@@ -126,3 +126,4 @@ public class UserDataService {
         return UserDataUtils.userdataToDto(userRepository.findAllByIncomingFriendRequestsContains(user));
     }
 }
+*/

@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.model;
+/*package ru.nsu.fit.crocodile.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,3 +23,4 @@ public class Role {
     private List<UserData> users = new LinkedList<>();
 
 }
+*/

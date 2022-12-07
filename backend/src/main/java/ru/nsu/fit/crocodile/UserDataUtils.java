@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile;
+/*package ru.nsu.fit.crocodile;
 
 import ru.nsu.fit.crocodile.dto.UserDto;
 import ru.nsu.fit.crocodile.model.UserData;
@@ -22,4 +22,4 @@ public class UserDataUtils {
         return dtoList;
     }
 
-}
+}*/

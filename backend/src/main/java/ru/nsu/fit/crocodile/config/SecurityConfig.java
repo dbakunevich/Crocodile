@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.config;
+/*package ru.nsu.fit.crocodile.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,3 +71,4 @@ public class SecurityConfig {
     }
 
 }
+*/

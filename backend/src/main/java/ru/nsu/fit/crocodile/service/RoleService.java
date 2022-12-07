@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.service;
+/*package ru.nsu.fit.crocodile.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,3 +32,4 @@ public class RoleService {
         return role.getId();
     }
 }
+*/

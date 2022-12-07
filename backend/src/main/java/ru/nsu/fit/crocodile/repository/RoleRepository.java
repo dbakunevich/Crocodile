@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.repository;
+/*package ru.nsu.fit.crocodile.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +22,4 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
 //    @Query("SELECT (count(r) = :size) from Role r where r.name in :names having size(:names) = count(r)")
 //    boolean isContainsNRolesWIthNamesIn(int size, List<String> names);
 
-}
+}*/

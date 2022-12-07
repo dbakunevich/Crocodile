@@ -1,4 +1,4 @@
-package ru.nsu.fit.crocodile.repository;
+/*package ru.nsu.fit.crocodile.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -26,4 +26,4 @@ public interface UserRepository extends JpaRepository<UserData, Long> {
 
     UserData findByOutcomingFriendRequests(UserData user);
 
-}
+}*/
