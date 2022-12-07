@@ -1,13 +1,39 @@
 import {useOnDraw} from './CustomHooks';
-import React from "react";
+import React, {useEffect, useState} from "react";
+import Stomp from "stompjs";
+import SockJS from "sockjs-client";
 
-const Canvas = ({CanWidth, CanHeight, color, width}) => {
+const Canvas = ({CanWidth, CanHeight, color, width, head}) => {
+
+    const [person, setPerson] = useState(1);
+
+    const socket = new SockJS('http://localhost:8080/game');
+    socket.onopen = function (){
+        console.log('good');
+    }
 
     const {setCanvasRef, onCanvasMouseDown} = useOnDraw(onDraw);
+    let stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+
+    });
+
+    function changePerson(id) {
+        setPerson(id);
+        stompClient.subscribe('/topic/session/1', function (greeting) {
+            console.log("session!")
+        });
+        stompClient.subscribe('/queue/session', function (gg){
+            console.log("ququq");
+        });
+        stompClient.send('/app/join/1', {}, '{"id":"' + person + '", "username": "first"}');
+    }
 
     function onDraw(ctx, point, prevPoint) {
-        
-        drawLine(prevPoint, point, ctx, color, width);
+        if (head) {
+            drawLine(prevPoint, point, ctx, color, width);
+            stompClient.send('/app/session/draw/',{},'{prevPoint point, ctx, color, width}');
+        }
     }
 
     function length(start, end){
@@ -37,13 +63,17 @@ const Canvas = ({CanWidth, CanHeight, color, width}) => {
     }
 
     return(
-        <canvas
-            width={CanWidth}
-            height={CanHeight}
-            onMouseDown={onCanvasMouseDown}
-            style={canvasStyle}
-            ref={setCanvasRef}
-        />
+        <div>
+            <canvas
+                width={CanWidth}
+                height={CanHeight}
+                onMouseDown={onCanvasMouseDown}
+                style={canvasStyle}
+                ref={setCanvasRef}
+            />
+            <div className="costil-person1" onClick={()=>{changePerson(1)}}> person1</div>
+            <div className="costil-person2" onClick={()=>{changePerson(2)}}> person2</div>
+        </div>
     );
 
 }
@@ -51,6 +81,5 @@ const Canvas = ({CanWidth, CanHeight, color, width}) => {
 export default Canvas;
 
 const canvasStyle = {
-    border: "1px solid black"
+    border: "1px solid white"
 }
-
