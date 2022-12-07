@@ -13,6 +13,13 @@ export function useOnDraw(onDraw) {
         canvasRef.current = ref;
     }
 
+    function getCanvasRef(){
+        console.log(canvasRef.current);
+        console.log(canvasRef.current.getContext('2d'));
+        console.log("gg");
+        return canvasRef.current.getContext('2d');
+    }
+
     function onCanvasMouseDown() {
         isDrawingRef.current = true;
     }
@@ -69,7 +76,8 @@ export function useOnDraw(onDraw) {
 
     return {
         setCanvasRef,
-        onCanvasMouseDown
+        onCanvasMouseDown,
+        getCanvasRef
     }
 
 }

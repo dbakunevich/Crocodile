@@ -10,15 +10,31 @@
 }
 
 .draw-board {
-    padding: 0;
+    padding: 2px;
     border-radius: 10px;
     background-color: white;
+}
+
+.head-button {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    right: 100px;
 }
 
 .drawing-things {
     padding: 40px;
     border-radius: 10px;
     background-color: white;
+}
+
+.color-switch {
+    height: 35px;
+    width: 35px;
+    appearance: none;
+    padding: 1px;
+    border: none;
+    outline: none;
 }
 
 .communication-part{
@@ -109,3 +125,17 @@
     padding: 0;
 }
 
+
+.costil-person1 {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    top: 180px;
+}
+
+.costil-person2 {
+    display: block;
+    position: fixed;
+    z-index: 1000;
+    top: 200px;
+}
