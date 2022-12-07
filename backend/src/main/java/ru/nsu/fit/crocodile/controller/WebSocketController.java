@@ -51,6 +51,7 @@ public class WebSocketController {
     @MessageMapping("/session/draw")
     public void drawEvent(DrawMessage message, SimpMessageHeaderAccessor headerAccessor){
         roomService.draw(message, headerAccessor);
+        log.warn("gg" + message);
     }
 
     @MessageMapping("/session/chat")

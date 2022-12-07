@@ -1,12 +1,13 @@
 package ru.nsu.fit.crocodile.message.Client;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import ru.nsu.fit.crocodile.model.Point;
 
-import javax.validation.constraints.NotNull;
 
 @Data
 public class DrawMessage {
-    @NotNull
-    private String changes;
+    final Point point;
+    final Point prevPoint;
+    final String color;
+    final Integer width;
 }
